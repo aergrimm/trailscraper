@@ -9,14 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const userLocationInput = document.getElementById('user-location');
   const travelDistFilter = document.getElementById('travel-dist-filter');
 
-  // Checkboxes & Wisselknoppen
   const distanceCheckboxes = document.querySelectorAll('.dist-checkbox');
   const btnToggleDist = document.getElementById('btn-toggle-dist');
 
   const provinceCheckboxes = document.querySelectorAll('.prov-checkbox');
   const btnToggleProv = document.getElementById('btn-toggle-prov');
 
-  // 1. Maandfilter dynamisch vullen: Huidige maand + 11 toekomstige maanden
+  // 1. Maandfilter vullen (huidige maand + 11 toekomstige maanden)
   function populateMonthFilter() {
     if (!monthFilter) return;
 
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. Datum formatter: YYYY-MM-DD -> za 20 sep 2026
+  // 2. Datum formatter
   function formatDutchDate(isoDateStr) {
     if (!isoDateStr || isoDateStr === "Onbekend") return "Datum onbekend";
 
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${shortDays[d.getDay()]} ${day} ${shortMonths[d.getMonth()]} ${year}`;
   }
 
-  // 3. Haversine formule (afstand in km tussen 2 lat/lon punten)
+  // 3. Haversine afstandsberekening (in km)
   function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -82,17 +81,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return Math.round(R * c);
   }
 
-  // 4. Geocoding via OpenStreetMap (Nominatim API)
-  async function geocodeAddress(query) {
-    if (!query) return null;
-    const cleanQuery = query.toLowerCase().trim();
+  // 4. Geocoding: ALLEEN voor de ingevoerde vertrekplaats!
+  async function geocodeUserCity(cityQuery) {
+    if (!cityQuery) return null;
+    const cleanQuery = cityQuery.toLowerCase().trim();
     if (geocodeCache[cleanQuery]) return geocodeCache[cleanQuery];
 
     try {
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1`;
-      const res = await fetch(url, {
-        headers: { 'User-Agent': 'TrailscraperApp/1.0' }
-      });
+      const res = await fetch(url, { headers: { 'User-Agent': 'TrailscraperApp/1.0' } });
       const data = await res.json();
       if (data && data.length > 0) {
         const coords = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
@@ -100,12 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return coords;
       }
     } catch (err) {
-      console.warn(`Geocoding fout voor '${query}':`, err);
+      console.warn(`Geocoding fout voor vertrekplaats '${cityQuery}':`, err);
     }
     return null;
   }
 
-  // 5. Automatisering voor iframe hoogte
+  // 5. Iframe hoogte bijwerken
   function sendHeightToParent() {
     if (window.parent && window.parent !== window) {
       const height = document.body.scrollHeight;
@@ -113,8 +110,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 6. Events renderen (Kaartindeling: Datum - Titel - Link | Locatie | Afstanden)
-  async function renderEvents(events) {
+  // 6. EENMALIG REISAFSTANDEN BEREKENEN (0.001 sec via JSON lat/lon)
+  async function updateCalculatedDistances() {
+    const userCity = userLocationInput ? userLocationInput.value.trim() : 'Utrecht';
+    const userCoords = await geocodeUserCity(userCity || 'Utrecht');
+
+    allEvents.forEach(e => {
+      if (userCoords && e.lat && e.lon) {
+        e.calculatedDistance = calculateHaversineDistance(userCoords.lat, userCoords.lon, e.lat, e.lon);
+      } else {
+        e.calculatedDistance = undefined;
+      }
+    });
+
+    filterEvents();
+  }
+
+  // 7. EVENTS RENDEREN
+  function renderEvents(events) {
     if (!eventsContainer) return;
 
     if (events.length === 0) {
@@ -124,18 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const userCity = userLocationInput ? userLocationInput.value.trim() : 'Utrecht';
-    const userCoords = await geocodeAddress(userCity || 'Utrecht');
 
-    const cardsHtml = await Promise.all(events.map(async e => {
+    const cardsHtml = events.map(e => {
       const humanReadableDate = formatDutchDate(e.date);
       const distText = e.distances && e.distances.length > 0 
         ? e.distances.join(', ') 
         : 'Afstand onbekend';
 
-      let travelDistBadge = '';
-      if (userCoords && e.calculatedDistance !== undefined) {
-        travelDistBadge = ` <span class="travel-distance">(±${e.calculatedDistance} km vanaf ${userCity})</span>`;
-      }
+      const travelDistBadge = e.calculatedDistance !== undefined
+        ? ` <span class="travel-distance">(±${e.calculatedDistance} km vanaf ${userCity})</span>`
+        : '';
 
       const linkHtml = (e.link && e.link !== "Onbekend")
         ? `<a class="trail-event-link" href="${e.link}" target="_blank" rel="noopener">Bekijk &rarr;</a>`
@@ -156,55 +167,39 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
-    }));
+    });
 
     eventsContainer.innerHTML = cardsHtml.join('');
     sendHeightToParent();
   }
 
-  // 7. Filter logica
-  async function filterEvents() {
+  // 8. FILTEREN (100% Synchroon & Instant)
+  function filterEvents() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedMonth = monthFilter ? monthFilter.value : 'all';
     const maxTravelKm = travelDistFilter ? travelDistFilter.value : 'all';
 
-    // Afstand categorieën
-    const checkedDistances = Array.from(distanceCheckboxes)
-      .filter(cb => cb.checked)
-      .map(cb => cb.value);
+    const checkedDistances = Array.from(distanceCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+    const checkedProvinces = Array.from(provinceCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
 
-    // Provincie categorieën
-    const checkedProvinces = Array.from(provinceCheckboxes)
-      .filter(cb => cb.checked)
-      .map(cb => cb.value.toLowerCase());
-
-    // Geocode vertrekplaats voor de reistijd-filter
-    const userCity = userLocationInput ? userLocationInput.value.trim() : 'Utrecht';
-    const userCoords = await geocodeAddress(userCity || 'Utrecht');
-
-    const filteredPromises = allEvents.map(async e => {
-      // 1. Zoekterm filter
+    const filtered = allEvents.filter(e => {
+      // 1. Zoekterm
       const matchesSearch = !searchTerm || 
         e.title.toLowerCase().includes(searchTerm) || 
         e.location.toLowerCase().includes(searchTerm);
 
-      // 2. Maand filter
-      const matchesMonth = selectedMonth === 'all' || 
-        (e.date && e.date.startsWith(selectedMonth));
+      // 2. Maand
+      const matchesMonth = selectedMonth === 'all' || (e.date && e.date.startsWith(selectedMonth));
 
-      // 3. Provincie Checkbox Filter
-      let matchesProvince = false;
-      if (checkedProvinces.length > 0) {
-        const eventProv = (e.province || 'Buitenland').toLowerCase();
-        matchesProvince = checkedProvinces.includes(eventProv);
-      }
+      // 3. Provincie
+      const eventProv = (e.province || 'Buitenland').toLowerCase();
+      const matchesProvince = checkedProvinces.length > 0 && checkedProvinces.includes(eventProv);
 
-      // 4. Afstand Checkbox Filter
+      // 4. Afstand van de trail
       let matchesDistance = false;
       if (checkedDistances.length > 0) {
         if (e.distances && e.distances.length > 0) {
           const kms = e.distances.map(d => parseInt(d.replace('km', ''), 10)).filter(n => !isNaN(n));
-          
           if (kms.length > 0) {
             const isUnder15 = checkedDistances.includes('under_15') && kms.some(k => k < 15);
             const isUpTo25  = checkedDistances.includes('up_to_25') && kms.some(k => k >= 15 && k <= 25);
@@ -220,36 +215,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 5. Max Reisafstand Filter (< 50 km, < 100 km)
+      // 5. Max Reisafstand
       let matchesTravelDistance = true;
-      e.calculatedDistance = undefined;
-
-      if (userCoords && e.location && e.location !== "Onbekend") {
-        let eventCoords = (e.lat && e.lon) ? { lat: e.lat, lon: e.lon } : await geocodeAddress(e.location);
-        if (eventCoords) {
-          const km = calculateHaversineDistance(userCoords.lat, userCoords.lon, eventCoords.lat, eventCoords.lon);
-          e.calculatedDistance = km;
-
-          if (maxTravelKm !== 'all') {
-            const maxKmNum = parseInt(maxTravelKm, 10);
-            matchesTravelDistance = km <= maxKmNum;
-          }
-        }
+      if (maxTravelKm !== 'all') {
+        const maxKmNum = parseInt(maxTravelKm, 10);
+        matchesTravelDistance = e.calculatedDistance !== undefined && e.calculatedDistance <= maxKmNum;
       }
 
-      if (matchesSearch && matchesMonth && matchesProvince && matchesDistance && matchesTravelDistance) {
-        return e;
-      }
-      return null;
+      return matchesSearch && matchesMonth && matchesProvince && matchesDistance && matchesTravelDistance;
     });
-
-    const results = await Promise.all(filteredPromises);
-    const filtered = results.filter(e => e !== null);
 
     renderEvents(filtered);
   }
 
-  // --- SLIMME WISSELKNOPPEN (Alles aan / Alles uit) ---
+  // WISSELKNOPPEN
   function updateToggleBtnText(checkboxes, btn) {
     const allChecked = Array.from(checkboxes).every(cb => cb.checked);
     btn.textContent = allChecked ? "Alles uit" : "Alles aan";
@@ -278,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
   }
 
-  // --- INITIALISATIE ---
+  // INITIALISATIE
   populateMonthFilter();
 
   fetch('events.json')
@@ -288,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(data => {
       allEvents = data;
-      filterEvents();
+      updateCalculatedDistances();
     })
     .catch(err => {
       console.error('Fout bij laden van events.json:', err);
@@ -297,16 +276,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-  // Debounce voor soepel typen
+  // Debounce voor vertrekplaats
   let timeoutId;
-  function debounceFilter() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(filterEvents, 400);
+  if (userLocationInput) {
+    userLocationInput.addEventListener('input', () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateCalculatedDistances, 400);
+    });
   }
 
-  // Event Listeners
-  if (searchInput) searchInput.addEventListener('input', debounceFilter);
-  if (userLocationInput) userLocationInput.addEventListener('input', debounceFilter);
+  // Event-listeners voor live filtering
+  if (searchInput) searchInput.addEventListener('input', filterEvents);
   if (monthFilter) monthFilter.addEventListener('change', filterEvents);
   if (travelDistFilter) travelDistFilter.addEventListener('change', filterEvents);
 
