@@ -237,3 +237,18 @@ function populateMonthDropdown() {
     monthSelect.appendChild(opt);
   }
 }
+
+// Stuur de exacte hoogte van de pagina naar het parent window (WordPress)
+function sendHeight() {
+  const height = document.body.scrollHeight;
+  window.parent.postMessage({ frameHeight: height }, '*');
+}
+
+// Pas deze regel aan in je bestaande renderEvents() functie:
+// Voeg sendHeight() toe helemaal aan het einde van renderEvents():
+function renderEvents(events) {
+  // ... je bestaande render logica ...
+  
+  // Stuur de nieuwe hoogte door na het renderen van de kaartjes
+  setTimeout(sendHeight, 100);
+}
