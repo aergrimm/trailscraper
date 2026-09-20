@@ -3,66 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trailrun Kalender Widget</title>
+  <title>Trailrun Kalender</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="trail-filter-box">
-    <!-- 1. Afstand v.a. Woonplaats -->
-    <div class="filter-group">
-      <label>📍 Maximale reisafstand v.a. Woonplaats:</label>
-      <div class="filter-row">
-        <input type="text" id="userLocation" value="Utrecht" placeholder="Bijv. Utrecht">
-        <select id="maxRadius" onchange="filterEvents()">
-          <option value="9999" selected>Alle afstanden</option>
-          <option value="25">&lt; 25 km</option>
-          <option value="50">&lt; 50 km</option>
-          <option value="75">&lt; 75 km</option>
-          <option value="100">&lt; 100 km</option>
-        </select>
-        <button type="button" onclick="updateUserCoordinates(event)">Bereken Afstand</button>
+  <div class="trail-container">
+    
+    <!-- Filterbalk -->
+    <div class="filter-container">
+      <div class="filter-group">
+        <input type="text" id="search-input" placeholder="Zoek op titel of locatie...">
       </div>
-    </div>
 
-    <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0;">
-
-    <!-- 2. Provincie Checkboxes met Alles Aan/Uit Knop -->
-    <div class="filter-group">
-      <div class="filter-group-header">
-        <label>🗺️ Selecteer Provincies:</label>
-        <button type="button" id="toggleProvincesBtn" class="btn-toggle-all" onclick="toggleAllProvinces()">Alles uitvinken</button>
-      </div>
-      <div class="province-grid" id="provinceCheckboxes"></div>
-    </div>
-
-    <!-- 3. Maand, Trail Afstand & Zoekbalk -->
-    <div class="filter-row">
-      <div>
-        <label for="monthFilter" style="display:block; font-weight:bold; margin-bottom:4px;">Maand:</label>
-        <select id="monthFilter" onchange="filterEvents()">
-          <option value="all">Alle maanden</option>
-        </select>
-      </div>
-      <div>
-        <label for="distanceFilter" style="display:block; font-weight:bold; margin-bottom:4px;">Trail Afstand:</label>
-        <select id="distanceFilter" onchange="filterEvents()">
+      <div class="filter-group">
+        <select id="distance-filter">
           <option value="all">Alle afstanden</option>
           <option value="short">Kort (&lt; 15 km)</option>
           <option value="medium">Middel (15 - 30 km)</option>
-          <option value="long">Lang (30 - 50 km)</option>
-          <option value="ultra">Ultra (50+ km)</option>
+          <option value="long">Lang (&gt; 30 km)</option>
         </select>
       </div>
-      <div>
-        <label for="searchFilter" style="display:block; font-weight:bold; margin-bottom:4px;">Zoeken:</label>
-        <input type="text" id="searchFilter" onkeyup="filterEvents()" placeholder="Zoek op naam of plaats...">
+
+      <div class="filter-group">
+        <select id="month-filter">
+          <option value="all">Alle maanden</option>
+          <option value="2026-04">April 2026</option>
+          <option value="2026-05">Mei 2026</option>
+          <option value="2026-06">Juni 2026</option>
+          <option value="2026-07">Juli 2026</option>
+          <option value="2026-08">Augustus 2026</option>
+          <option value="2026-09">September 2026</option>
+          <option value="2026-10">Oktober 2026</option>
+          <option value="2026-11">November 2026</option>
+          <option value="2026-12">December 2026</option>
+        </select>
       </div>
     </div>
+
+    <!-- Container voor evenementen -->
+    <div id="events-container"></div>
+
   </div>
 
-  <div id="trailEventsList">Laden van trailrun evenementen...</div>
-
+  <!-- JavaScript koppeling -->
   <script src="app.js"></script>
 </body>
 </html>

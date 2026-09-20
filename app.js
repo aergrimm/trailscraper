@@ -1,282 +1,142 @@
-let allTrailEvents = [];
-let userLat = 52.0907; // Standaard Utrecht GPS
-let userLon = 5.1214;
-let allProvincesChecked = true;
+document.addEventListener('DOMContentLoaded', () => {
+  let allEvents = [];
 
-const PROVINCES = [
-  "Drenthe", "Flevoland", "Friesland", "Gelderland", "Groningen", 
-  "Limburg", "Noord-Brabant", "Noord-Holland", "Overijssel", 
-  "Utrecht", "Zeeland", "Zuid-Holland"
-];
+  // DOM elementen
+  const eventsContainer = document.getElementById('events-container');
+  const searchInput = document.getElementById('search-input');
+  const distanceFilter = document.getElementById('distance-filter');
+  const monthFilter = document.getElementById('month-filter');
 
-const jsonUrl = './events.json';
+  // 1. Datum formatter: zet 'YYYY-MM-DD' om naar 'za 20 sep 2026'
+  function formatDutchDate(isoDateStr) {
+    if (!isoDateStr || isoDateStr === "Onbekend") return "Datum onbekend";
 
-function initApp() {
-  console.log("🚀 [TRAILSCRAPER] App initialiseren...");
-  buildProvinceCheckboxes();
-  populateMonthDropdown();
+    const parts = isoDateStr.split('-');
+    if (parts.length !== 3) return isoDateStr;
 
-  fetch(jsonUrl)
-    .then(r => {
-      console.log("📡 [FETCH STATUS]:", r.status);
-      if (!r.ok) throw new Error('Status ' + r.status + ' - JSON niet bereikbaar');
-      return r.json();
-    })
-    .then(data => {
-      console.log("📦 [DATA GELADEN]:", data.length, "events gevonden");
-      allTrailEvents = data;
-      filterEvents();
-    })
-    .catch(err => {
-      console.error("❌ [FETCH ERROR]:", err);
-      const container = document.getElementById('trailEventsList');
-      if (container) {
-        container.innerHTML = `<p style="color:red; padding:15px; background:#fff; border:1px solid red; border-radius:8px;">
-          <strong>Fout bij ophalen kalender:</strong> ${err.message}
-        </p>`;
-      }
-    });
-}
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Maanden zijn 0-indexed in JS
+    const day = parseInt(parts[2], 10);
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
-} else {
-  initApp();
-}
+    const d = new Date(year, month, day);
+    if (isNaN(d.getTime())) return isoDateStr;
 
-function sendHeight() {
-  try {
+    const shortDays = ["zo", "ma", "di", "wo", "do", "vr", "za"];
+    const shortMonths = ["jan", "feb", "mar", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"];
+
+    const dayName = shortDays[d.getDay()];
+    const monthName = shortMonths[d.getMonth()];
+
+    return `${dayName} ${day} ${monthName} ${year}`;
+  }
+
+  // 2. Automatisering voor iframe hoogte (handig voor WordPress integratie)
+  function sendHeightToParent() {
     if (window.parent && window.parent !== window) {
       const height = document.body.scrollHeight;
       window.parent.postMessage({ frameHeight: height }, '*');
     }
-  } catch (e) {
-    // Negeer iframe waarschuwing
-  }
-}
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  if (!lat1 || !lon1 || !lat2 || !lon2) return null;
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return Math.round(R * c);
-}
-
-function updateUserCoordinates(e) {
-  if (e) e.preventDefault();
-  
-  const cityInput = document.getElementById('userLocation');
-  const city = cityInput ? cityInput.value : '';
-  if (!city) return;
-  
-  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city + ', Nederland')}`)
-    .then(r => r.json())
-    .then(data => {
-      if (data && data.length > 0) {
-        userLat = parseFloat(data[0].lat);
-        userLon = parseFloat(data[0].lon);
-        filterEvents();
-      } else {
-        alert('Locatie niet gevonden. Probeer een andere plaatsnaam.');
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Fout bij ophalen van GPS-coördinaten.');
-    });
-}
-
-function buildProvinceCheckboxes() {
-  const container = document.getElementById('provinceCheckboxes');
-  if (!container) return;
-  
-  container.innerHTML = PROVINCES.map(p => `
-    <label>
-      <input type="checkbox" class="prov-cb" value="${p}" checked onchange="updateToggleBtnState(); filterEvents();"> ${p}
-    </label>
-  `).join('');
-}
-
-function toggleAllProvinces() {
-  const checkboxes = document.querySelectorAll('.prov-cb');
-  allProvincesChecked = !allProvincesChecked;
-
-  checkboxes.forEach(cb => {
-    cb.checked = allProvincesChecked;
-  });
-
-  const btn = document.getElementById('toggleProvincesBtn');
-  if (btn) {
-    btn.textContent = allProvincesChecked ? 'Alles uitvinken' : 'Alles aanvinken';
   }
 
-  filterEvents();
-}
+  // 3. Events renderen op de pagina
+  function renderEvents(events) {
+    if (!eventsContainer) return;
 
-function updateToggleBtnState() {
-  const checkboxes = Array.from(document.querySelectorAll('.prov-cb'));
-  const checkedCount = checkboxes.filter(cb => cb.checked).length;
-  const btn = document.getElementById('toggleProvincesBtn');
-  
-  if (!btn) return;
-
-  if (checkedCount === checkboxes.length) {
-    allProvincesChecked = true;
-    btn.textContent = 'Alles uitvinken';
-  } else {
-    allProvincesChecked = false;
-    btn.textContent = 'Alles aanvinken';
-  }
-}
-
-function filterEvents() {
-  if (!allTrailEvents || allTrailEvents.length === 0) return;
-
-  try {
-    const maxRadiusEl = document.getElementById('maxRadius');
-    const maxRadius = maxRadiusEl ? parseFloat(maxRadiusEl.value) : 9999;
-
-    const monthEl = document.getElementById('monthFilter');
-    const selectedMonth = monthEl ? monthEl.value : 'all';
-
-    const distEl = document.getElementById('distanceFilter');
-    const distCategory = distEl ? distEl.value : 'all';
-
-    const searchEl = document.getElementById('searchFilter');
-    const searchQuery = searchEl ? searchEl.value.toLowerCase() : '';
-    
-    // Aangevinkte provincies ophalen
-    const checkedBoxes = document.querySelectorAll('.prov-cb:checked');
-    const checkedProvinces = Array.from(checkedBoxes).map(cb => cb.value.toLowerCase().trim());
-
-    const filtered = allTrailEvents.filter(event => {
-      // 1. Zoekbalk filter
-      const titleMatch = event.title ? event.title.toLowerCase().includes(searchQuery) : false;
-      const locMatch = event.location ? event.location.toLowerCase().includes(searchQuery) : false;
-      if (searchQuery && !titleMatch && !locMatch) return false;
-
-      // 2. Provincie filter (Aangepast & Soepel gemaak):
-      const rawProv = event.province ? event.province.toLowerCase().trim() : "";
-      const rawLoc = event.location ? event.location.toLowerCase().trim() : "";
-
-      // Als de gebruiker provincies heeft aangevinkt, check of event.province óf event.location matcht
-      if (checkedProvinces.length > 0) {
-        const matchesProv = rawProv && checkedProvinces.includes(rawProv);
-        const matchesLoc = checkedProvinces.some(p => rawLoc.includes(p));
-        
-        if (!matchesProv && !matchesLoc) {
-          return false;
-        }
-      }
-
-      // 3. Afstand v.a. Woonplaats filter
-      if (event.lat && event.lon) {
-        const distFromUser = calculateDistance(userLat, userLon, event.lat, event.lon);
-        event._distFromUser = distFromUser;
-        if (distFromUser && distFromUser > maxRadius) {
-          return false;
-        }
-      } else {
-        event._distFromUser = null;
-      }
-
-      // 4. Maand filter (YYYY-MM)
-      if (selectedMonth !== 'all' && (!event.date || !event.date.startsWith(selectedMonth))) {
-        return false;
-      }
-
-      // 5. Trail Afstand filter
-      if (distCategory !== 'all') {
-        if (!event.distances || event.distances.length === 0) return false;
-        return event.distances.some(d => {
-          const match = d.match(/\d+/);
-          if (!match) return false;
-          const num = parseInt(match[0], 10);
-          if (distCategory === 'short') return num < 15;
-          if (distCategory === 'medium') return num >= 15 && num < 30;
-          if (distCategory === 'long') return num >= 30 && num < 50;
-          if (distCategory === 'ultra') return num >= 50;
-          return true;
-        });
-      }
-
-      return true;
-    });
-
-    console.log("🔍 [GEFILTERD]:", filtered.length, "events blijven over na filters");
-    renderEvents(filtered);
-  } catch (err) {
-    console.error("❌ [FILTER ERROR]:", err);
-  }
-}
-
-function renderEvents(events) {
-  const container = document.getElementById('trailEventsList');
-  if (!container) return;
-
-  if (events.length === 0) {
-    container.innerHTML = '<p style="padding:15px; background:#fff; border:1px solid #ddd; border-radius:8px;">Geen evenementen gevonden voor de geselecteerde filters.</p>';
-    sendHeight();
-    return;
-  }
-
-  const userCityEl = document.getElementById('userLocation');
-  const userCity = userCityEl ? userCityEl.value : 'Utrecht';
-
-  container.innerHTML = events.map(e => {
-    const city = (e.city && e.city !== "Onbekend") ? e.city : (e.location ? e.location.split(',')[0].trim() : "Onbekend");
-    const province = (e.province && e.province !== "Onbekend") ? e.province : "";
-    const country = e.country || "Nederland";
-
-    let locationParts = [];
-    if (city) locationParts.push(city);
-    if (province && !city.toLowerCase().includes(province.toLowerCase())) {
-      locationParts.push(province);
+    if (events.length === 0) {
+      eventsContainer.innerHTML = '<div class="no-events">Geen trailrun evenementen gevonden voor deze filters.</div>';
+      sendHeightToParent();
+      return;
     }
-    if (country) locationParts.push(country);
 
-    const fullLocationDisplay = locationParts.join(', ');
+    eventsContainer.innerHTML = events.map(e => {
+      const humanReadableDate = formatDutchDate(e.date);
+      
+      const distText = e.distances && e.distances.length > 0 
+        ? e.distances.join(', ') 
+        : 'Afstand onbekend';
 
-    const distBadge = (e._distFromUser !== null && e._distFromUser !== undefined) 
-      ? `<span class="distance-badge">🚗 ${e._distFromUser} km v.a. ${userCity}</span>` 
-      : '';
-
-    const distancesText = e.distances && e.distances.length > 0 
-      ? `<span class="trail-event-distances">🏃 ${e.distances.join(', ')}</span>` 
-      : '<span style="color:#888; font-size:0.85rem;">Afstand onbekend</span>';
-
-    return `
-      <div class="trail-event-card">
-        <h3>${e.title}</h3>
-        <div class="trail-event-meta">
-          📅 <strong>${e.date}</strong> | 📍 ${fullLocationDisplay} ${distBadge}
+      return `
+        <div class="trail-event-card">
+          <h3>${e.title}</h3>
+          <div class="trail-event-meta">
+            📅 <strong>${humanReadableDate}</strong> | 📍 ${e.location}
+          </div>
+          <div class="trail-event-distances">
+            🏃 ${distText}
+          </div>
+          ${e.link && e.link !== "Onbekend" 
+            ? `<a class="trail-event-link" href="${e.link}" target="_blank" rel="noopener">Bekijk evenement &rarr;</a>` 
+            : ''}
         </div>
-        ${distancesText}
-        ${e.link ? `<br><a class="trail-event-link" href="${e.link}" target="_blank" rel="noopener">Bekijk evenement &rarr;</a>` : ''}
-      </div>
-    `;
-  }).join('');
+      `;
+    }).join('');
 
-  sendHeight();
-}
-
-function populateMonthDropdown() {
-  const monthSelect = document.getElementById('monthFilter');
-  if (!monthSelect) return;
-  
-  const now = new Date();
-  const dutchMonthNames = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-  for (let i = 0; i < 12; i++) {
-    const m = (now.getMonth() + i) % 12;
-    const y = now.getFullYear() + Math.floor((now.getMonth() + i) / 12);
-    const opt = document.createElement('option');
-    opt.value = `${y}-${String(m + 1).padStart(2, '0')}`;
-    opt.textContent = `${dutchMonthNames[m]} ${y}`;
-    monthSelect.appendChild(opt);
+    sendHeightToParent();
   }
-}
+
+  // 4. Filters toepassen
+  function filterEvents() {
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const selectedDistance = distanceFilter ? distanceFilter.value : 'all';
+    const selectedMonth = monthFilter ? monthFilter.value : 'all';
+
+    const filtered = allEvents.filter(e => {
+      // Zoekterm filter (titel & locatie)
+      const matchesSearch = !searchTerm || 
+        e.title.toLowerCase().includes(searchTerm) || 
+        e.location.toLowerCase().includes(searchTerm);
+
+      // Maand filter (vergelijkt YYYY-MM)
+      const matchesMonth = selectedMonth === 'all' || 
+        (e.date && e.date.startsWith(selectedMonth));
+
+      // Afstand filter
+      let matchesDistance = true;
+      if (selectedDistance !== 'all' && e.distances && e.distances.length > 0) {
+        // Haal alle numerieke afstanden op uit de array ['10km', '20km'] -> [10, 20]
+        const kms = e.distances.map(d => parseInt(d.replace('km', ''), 10)).filter(n => !isNaN(n));
+        
+        if (kms.length > 0) {
+          if (selectedDistance === 'short') { // < 15 km
+            matchesDistance = kms.some(k => k < 15);
+          } else if (selectedDistance === 'medium') { // 15 - 30 km
+            matchesDistance = kms.some(k => k >= 15 && k <= 30);
+          } else if (selectedDistance === 'long') { // > 30 km
+            matchesDistance = kms.some(k => k > 30);
+          }
+        }
+      }
+
+      return matchesSearch && matchesMonth && matchesDistance;
+    });
+
+    renderEvents(filtered);
+  }
+
+  // 5. Data ophalen uit events.json
+  fetch('events.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP fout! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      allEvents = data;
+      renderEvents(allEvents);
+    })
+    .catch(error => {
+      console.error('Fout bij het laden van events.json:', error);
+      if (eventsContainer) {
+        eventsContainer.innerHTML = '<div class="error-msg">Kan de evenementen op dit moment niet laden.</div>';
+      }
+    });
+
+  // Event listeners voor live filtering
+  if (searchInput) searchInput.addEventListener('input', filterEvents);
+  if (distanceFilter) distanceFilter.addEventListener('change', filterEvents);
+  if (monthFilter) monthFilter.addEventListener('change', filterEvents);
+
+  // Pas iframe hoogte aan bij verandering van venstergrootte
+  window.addEventListener('resize', sendHeightToParent);
+});
