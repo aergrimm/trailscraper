@@ -9,28 +9,42 @@ const PROVINCES = [
   "Utrecht", "Zeeland", "Zuid-Holland"
 ];
 
-// Relatieve URL omdat events.json in dezelfde GitHub Pages map staat
 const jsonUrl = './events.json';
 
-document.addEventListener('DOMContentLoaded', function() {
+// Functie die direct de data gaat ophalen
+function initApp() {
+  console.log("🚀 [TRAILSCRAPER] App initialiseren...");
   buildProvinceCheckboxes();
   populateMonthDropdown();
 
   fetch(jsonUrl)
     .then(r => {
+      console.log("📡 [FETCH STATUS]:", r.status);
       if (!r.ok) throw new Error('Status ' + r.status + ' - JSON niet bereikbaar');
       return r.json();
     })
     .then(data => {
+      console.log("📦 [DATA GELADEN]:", data.length, "events gevonden");
       allTrailEvents = data;
       filterEvents();
     })
     .catch(err => {
-      console.error(err);
-      document.getElementById('trailEventsList').innerHTML = 
-        '<p style="color:red;"><strong>Er ging iets mis bij het ophalen van de kalender.</strong></p>';
+      console.error("❌ [FETCH ERROR]:", err);
+      const container = document.getElementById('trailEventsList');
+      if (container) {
+        container.innerHTML = `<p style="color:red; padding:15px; background:#fff; border:1px solid red; border-radius:8px;">
+          <strong>Fout bij ophalen kalender:</strong> ${err.message}
+        </p>`;
+      }
     });
-});
+}
+
+// Zorg dat de app start, ongeacht wanneer het script geladen wordt
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
   if (!lat1 || !lon1 || !lat2 || !lon2) return null;
