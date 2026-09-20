@@ -34,18 +34,46 @@
         </div>
       </div>
 
-      <!-- Rij 2: Afstand Checkboxes & Snelknoppen -->
-      <div class="filter-row checkbox-row">
-        <span class="filter-label">Afstanden:</span>
-        <div class="checkbox-group">
-          <label><input type="checkbox" class="dist-checkbox" value="short" checked> Kort (&lt; 15 km)</label>
-          <label><input type="checkbox" class="dist-checkbox" value="medium" checked> Middel (15 - 30 km)</label>
-          <label><input type="checkbox" class="dist-checkbox" value="long" checked> Lang (&gt; 30 km)</label>
+      <!-- Rij 2: Afstand Checkboxes -->
+      <div class="filter-block">
+        <div class="filter-block-header">
+          <span class="filter-label">Afstanden:</span>
+          <div class="btn-group">
+            <button type="button" id="btn-dist-select-all" class="btn-select">Alles aan</button>
+            <button type="button" id="btn-dist-deselect-all" class="btn-select">Alles uit</button>
+          </div>
         </div>
-        
-        <div class="btn-group">
-          <button type="button" id="btn-select-all" class="btn-select">Alles aan</button>
-          <button type="button" id="btn-deselect-all" class="btn-select">Alles uit</button>
+        <div class="checkbox-group">
+          <label><input type="checkbox" class="dist-checkbox" value="under_15" checked> &lt; 15 km</label>
+          <label><input type="checkbox" class="dist-checkbox" value="up_to_25" checked> 15 t/m 25 km</label>
+          <label><input type="checkbox" class="dist-checkbox" value="up_to_42" checked> 26 t/m 42 km</label>
+          <label><input type="checkbox" class="dist-checkbox" value="over_42" checked> &gt; 42 km</label>
+        </div>
+      </div>
+
+      <!-- Rij 3: Provincie Checkboxes -->
+      <div class="filter-block">
+        <div class="filter-block-header">
+          <span class="filter-label">Provincies:</span>
+          <div class="btn-group">
+            <button type="button" id="btn-prov-select-all" class="btn-select">Alles aan</button>
+            <button type="button" id="btn-prov-deselect-all" class="btn-select">Alles uit</button>
+          </div>
+        </div>
+        <div class="checkbox-group province-grid">
+          <label><input type="checkbox" class="prov-checkbox" value="Drenthe" checked> Drenthe</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Flevoland" checked> Flevoland</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Friesland" checked> Friesland</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Gelderland" checked> Gelderland</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Groningen" checked> Groningen</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Limburg" checked> Limburg</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Noord-Brabant" checked> Noord-Brabant</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Noord-Holland" checked> Noord-Holland</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Overijssel" checked> Overijssel</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Utrecht" checked> Utrecht</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Zeeland" checked> Zeeland</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Zuid-Holland" checked> Zuid-Holland</label>
+          <label><input type="checkbox" class="prov-checkbox" value="Buitenland" checked> Overig / Buitenland</label>
         </div>
       </div>
 
