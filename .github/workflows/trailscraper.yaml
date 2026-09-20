@@ -1,0 +1,39 @@
+name: Automatic Trail Scraper
+
+on:
+  schedule:
+    # Draait elke nacht om 02:00 UTC (cron-schedule)
+    - cron: '0 2 * * *'
+  # Maakt het ook mogelijk om de scraper handmatig via de GitHub knop uit te voeren
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code ophalen uit Git
+        uses: actions/checkout@v4
+
+      - name: Python instellen
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Dependencies installeren
+        run: |
+          python -m pip install --upgrade pip
+          pip install beautifulsoup4 requests feedgen icalendar python-dateutil
+
+      - name: Scraper uitvoeren
+        run: python scraper.py
+
+      - name: Automatisch resultaten opslaan in Git
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "action@github.com"
+          git add events.json trail_events.xml trail_events.ics
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update trail events via cron" && git push)
