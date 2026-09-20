@@ -51,7 +51,7 @@ function sendHeight() {
       window.parent.postMessage({ frameHeight: height }, '*');
     }
   } catch (e) {
-    // Negeer iframe communicatiefout op standalone pagina
+    // Negeer iframe waarschuwing
   }
 }
 
@@ -150,7 +150,7 @@ function filterEvents() {
     const searchEl = document.getElementById('searchFilter');
     const searchQuery = searchEl ? searchEl.value.toLowerCase() : '';
     
-    // Aangevinkte provincies (case-insensitive)
+    // Aangevinkte provincies ophalen
     const checkedBoxes = document.querySelectorAll('.prov-cb:checked');
     const checkedProvinces = Array.from(checkedBoxes).map(cb => cb.value.toLowerCase().trim());
 
@@ -160,10 +160,16 @@ function filterEvents() {
       const locMatch = event.location ? event.location.toLowerCase().includes(searchQuery) : false;
       if (searchQuery && !titleMatch && !locMatch) return false;
 
-      // 2. Provincie filter (Als er provincies zijn aangevinkt, moet de event.province daarin voorkomen)
+      // 2. Provincie filter (Aangepast & Soepel gemaak):
       const rawProv = event.province ? event.province.toLowerCase().trim() : "";
-      if (checkedProvinces.length > 0 && rawProv && rawProv !== "onbekend") {
-        if (!checkedProvinces.includes(rawProv)) {
+      const rawLoc = event.location ? event.location.toLowerCase().trim() : "";
+
+      // Als de gebruiker provincies heeft aangevinkt, check of event.province óf event.location matcht
+      if (checkedProvinces.length > 0) {
+        const matchesProv = rawProv && checkedProvinces.includes(rawProv);
+        const matchesLoc = checkedProvinces.some(p => rawLoc.includes(p));
+        
+        if (!matchesProv && !matchesLoc) {
           return false;
         }
       }
