@@ -30,58 +30,93 @@ def clean_text_no_icons(text):
     clean = re.sub(r'[\U00010000-\U0010ffff\u2600-\u27ff\u2300-\u23ff]', '', text)
     return re.sub(r'\s+', ' ', clean).strip()
 
-def normalize_location(location_str):
+def get_location_details(raw_location_str):
     """
-    Schoont de locatiestring op en verwijdert dubbele plaats/provincienamen.
-    Bijv: 'Doorn, Utrecht, Utrecht' -> 'Doorn, Utrecht'
+    Analyseert en verrijkt een locatie via OpenStreetMap Nominatim.
+    Schoont dubbelingen op en levert losse velden (city, province, country).
     """
-    clean_loc = clean_text_no_icons(location_str)
-    if not clean_loc:
-        return ""
+    clean_input = clean_text_no_icons(raw_location_str)
+    if not clean_input or clean_input == "Onbekende locatie":
+        return {
+            "formatted": "Onbekende locatie",
+            "city": "Onbekend",
+            "province": "Onbekend",
+            "country": "Nederland",
+            "lat": None,
+            "lon": None
+        }
     
-    parts = [p.strip() for p in clean_loc.split(",") if p.strip()]
-    unique_parts = []
-    for p in parts:
-        if p not in unique_parts:
-            unique_parts.append(p)
-            
-    return ", ".join(unique_parts)
-
-def get_location_details(location_str):
-    """
-    Haalt op basis van een plaatsnaam de exacte provincie en lat/lon op via OpenStreetMap Nominatim API.
-    """
-    if not location_str or location_str == "Onbekende locatie":
-        return {"province": "Onbekend", "lat": None, "lon": None}
-    
-    if location_str in GEO_CACHE:
-        return GEO_CACHE[location_str]
+    if clean_input in GEO_CACHE:
+        return GEO_CACHE[clean_input]
 
     try:
         headers = {"User-Agent": "TrailCalendarScraper/1.0 (info@example.com)"}
-        clean_loc = f"{location_str}, Nederland"
-        url = f"https://nominatim.openstreetmap.org/search?format=json&q={quote(clean_loc)}&addressdetails=1&limit=1"
+        query_str = f"{clean_input}, Nederland" if "nederland" not in clean_input.lower() else clean_input
+        url = f"https://nominatim.openstreetmap.org/search?format=json&q={quote(query_str)}&addressdetails=1&limit=1"
         
         response = requests.get(url, headers=headers, timeout=5)
-        # Eerbiedig de Nominatim API rate limit (max 1 verzoek per seconde)
-        time.sleep(1)
+        time.sleep(1) # Eerbiedig de Nominatim API rate limit (max 1 req/sec)
 
         if response.status_code == 200 and response.json():
             data = response.json()[0]
             address = data.get("address", {})
             
-            province = address.get("state") or address.get("region") or "Onbekend"
-            lat = float(data.get("lat"))
-            lon = float(data.get("lon"))
+            # 1. Plaats bepalen (stad, dorp, gemeente)
+            city = (
+                address.get("village") or 
+                address.get("town") or 
+                address.get("city") or 
+                address.get("municipality") or 
+                clean_input.split(",")[0].strip()
+            )
+
+            # 2. Provincie bepalen
+            province = (
+                address.get("state") or 
+                address.get("province") or 
+                address.get("region") or 
+                "Onbekend"
+            )
+
+            # 3. Land bepalen
+            country = address.get("country") or "Nederland"
+
+            # 4. GPS Coördinaten
+            lat = float(data.get("lat")) if data.get("lat") else None
+            lon = float(data.get("lon")) if data.get("lon") else None
+
+            # 5. Geformatteerde locatiestring opbouwen (bijv. "Stramproy, Limburg")
+            loc_parts = []
+            if city and city != "Onbekend":
+                loc_parts.append(city)
+            if province and province != "Onbekend" and province.lower() not in city.lower():
+                loc_parts.append(province)
             
-            result = {"province": province, "lat": lat, "lon": lon}
-            GEO_CACHE[location_str] = result
+            formatted_location = ", ".join(loc_parts) if loc_parts else clean_input
+
+            result = {
+                "formatted": formatted_location,
+                "city": city,
+                "province": province,
+                "country": country,
+                "lat": lat,
+                "lon": lon
+            }
+            GEO_CACHE[clean_input] = result
             return result
     except Exception:
         pass
 
-    fallback = {"province": "Onbekend", "lat": None, "lon": None}
-    GEO_CACHE[location_str] = fallback
+    # Fallback als OSM niets vindt
+    fallback = {
+        "formatted": clean_input,
+        "city": clean_input.split(",")[0].strip() if clean_input else "Onbekend",
+        "province": "Onbekend",
+        "country": "Nederland",
+        "lat": None,
+        "lon": None
+    }
+    GEO_CACHE[clean_input] = fallback
     return fallback
 
 def is_similar_title(a, b, threshold=0.75):
@@ -192,13 +227,13 @@ def scrape_site(site_config):
         cards = soup.select(card_selector)
 
         for card in cards:
-            # 1. Titel (met opschoning)
+            # 1. Titel
             title_selector = selectors.get("title", "")
             title_el = card.select_one(title_selector) if title_selector else None
             raw_title = title_el.get_text(strip=True) if title_el else "Geen titel"
             title = clean_text_no_icons(raw_title)
 
-            # 2. Datum (Enkel of Opgesplitst)
+            # 2. Datum
             date_selector = selectors.get("date", "")
             month_selector = selectors.get("date_month", "")
             day_selector = selectors.get("date_day", "")
@@ -216,17 +251,15 @@ def scrape_site(site_config):
             else:
                 event_date = "Onbekende datum"
 
-            # FILTER: Datums in het verleden skippen
+            # Filter oude datums
             if event_date != "Onbekende datum" and event_date < today_str:
                 continue
 
-            # 3. Locatie + Geocoding (Provincie & GPS)
+            # 3. Locatie + Geocoding
             loc_selector = selectors.get("location", "")
             loc_el = card.select_one(loc_selector) if loc_selector else None
             raw_location = loc_el.get_text(strip=True) if loc_el else ""
-            location = normalize_location(raw_location)
-            
-            loc_info = get_location_details(location)
+            loc_info = get_location_details(raw_location)
 
             # 4. Afstanden
             distances = extract_distances(card, selectors.get("distances", ""))
@@ -240,11 +273,14 @@ def scrape_site(site_config):
                     raw_href = link_el.get("href")
                     link = raw_href if raw_href.startswith("http") else urljoin(current_url, raw_href)
 
+            # 6. Event opslaan
             events.append({
                 "title": title,
                 "date": event_date,
-                "location": location,
+                "location": loc_info["formatted"],
+                "city": loc_info["city"],
                 "province": loc_info["province"],
+                "country": loc_info["country"],
                 "lat": loc_info["lat"],
                 "lon": loc_info["lon"],
                 "distances": distances,
@@ -279,7 +315,9 @@ def deduplicate_events(all_events):
                         u_event["link"] = event["link"]
                     if not u_event["location"] and event["location"]:
                         u_event["location"] = event["location"]
+                        u_event["city"] = event["city"]
                         u_event["province"] = event["province"]
+                        u_event["country"] = event["country"]
                         u_event["lat"] = event["lat"]
                         u_event["lon"] = event["lon"]
                     break
@@ -314,7 +352,7 @@ def generate_rss(events, output_file="trail_events.xml"):
         if ev["link"]:
             fe.link(href=ev["link"])
             
-        desc = f"Datum: {ev['date']}\nLocatie: {ev['location'] or 'Onbekend'} ({ev.get('province', 'Onbekend')})\nAfstanden: {', '.join(ev['distances']) or 'Onbekend'}\nBron: {ev['source']}"
+        desc = f"Datum: {ev['date']}\nLocatie: {ev['location'] or 'Onbekend'}\nAfstanden: {', '.join(ev['distances']) or 'Onbekend'}\nBron: {ev['source']}"
         fe.description(desc)
 
         if ev["date"] != "Onbekende datum":
@@ -340,7 +378,7 @@ def generate_ics(events, output_file="trail_events.ics"):
         dist_str = f" [{', '.join(ev['distances'])}]" if ev['distances'] else ""
         event.add('summary', f"{ev['title']}{dist_str}")
         
-        desc = f"Locatie: {ev['location']} ({ev.get('province', 'Onbekend')})\nAfstanden: {', '.join(ev['distances'])}\nBron: {ev['source']}\nLink: {ev['link']}"
+        desc = f"Locatie: {ev['location']}\nAfstanden: {', '.join(ev['distances'])}\nBron: {ev['source']}\nLink: {ev['link']}"
         event.add('description', desc)
         
         if ev["location"]:
@@ -381,7 +419,7 @@ def main():
 
     for i, ev in enumerate(unique_events, start=1):
         dist_str = f" | {', '.join(ev['distances'])}" if ev['distances'] else ""
-        loc_str = f" | {ev['location']} ({ev['province']})" if ev['location'] else ""
+        loc_str = f" | {ev['location']}" if ev['location'] else ""
         url_str = f" | {ev['link']}" if ev['link'] else ""
         
         print(f"[{i}] {ev['date']} | {ev['title']}{loc_str}{dist_str}{url_str}")
