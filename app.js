@@ -44,7 +44,6 @@ if (document.readyState === 'loading') {
   initApp();
 }
 
-// Veilige sendHeight wat nie breek op GitHub Pages nie
 function sendHeight() {
   try {
     if (window.parent && window.parent !== window) {
@@ -52,7 +51,7 @@ function sendHeight() {
       window.parent.postMessage({ frameHeight: height }, '*');
     }
   } catch (e) {
-    // Negeer waarskuwing as postMessage nie toegelaat word nie
+    // Negeer iframe communicatiefout op standalone pagina
   }
 }
 
@@ -151,6 +150,7 @@ function filterEvents() {
     const searchEl = document.getElementById('searchFilter');
     const searchQuery = searchEl ? searchEl.value.toLowerCase() : '';
     
+    // Aangevinkte provincies (case-insensitive)
     const checkedBoxes = document.querySelectorAll('.prov-cb:checked');
     const checkedProvinces = Array.from(checkedBoxes).map(cb => cb.value.toLowerCase().trim());
 
@@ -160,9 +160,9 @@ function filterEvents() {
       const locMatch = event.location ? event.location.toLowerCase().includes(searchQuery) : false;
       if (searchQuery && !titleMatch && !locMatch) return false;
 
-      // 2. Provincie filter
+      // 2. Provincie filter (Als er provincies zijn aangevinkt, moet de event.province daarin voorkomen)
       const rawProv = event.province ? event.province.toLowerCase().trim() : "";
-      if (rawProv && rawProv !== "onbekend") {
+      if (checkedProvinces.length > 0 && rawProv && rawProv !== "onbekend") {
         if (!checkedProvinces.includes(rawProv)) {
           return false;
         }
@@ -202,6 +202,7 @@ function filterEvents() {
       return true;
     });
 
+    console.log("🔍 [GEFILTERD]:", filtered.length, "events blijven over na filters");
     renderEvents(filtered);
   } catch (err) {
     console.error("❌ [FILTER ERROR]:", err);
