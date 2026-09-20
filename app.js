@@ -7,9 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-input');
   const userLocationInput = document.getElementById('user-location');
   const monthFilter = document.getElementById('month-filter');
+
+  // Checkboxes
   const distanceCheckboxes = document.querySelectorAll('.dist-checkbox');
-  const btnSelectAll = document.getElementById('btn-select-all');
-  const btnDeselectAll = document.getElementById('btn-deselect-all');
+  const btnDistSelectAll = document.getElementById('btn-dist-select-all');
+  const btnDistDeselectAll = document.getElementById('btn-dist-deselect-all');
+
+  const provinceCheckboxes = document.querySelectorAll('.prov-checkbox');
+  const btnProvSelectAll = document.getElementById('btn-prov-select-all');
+  const btnProvDeselectAll = document.getElementById('btn-prov-deselect-all');
 
   // 1. Maandfilter dynamisch vullen: Huidige maand + 11 toekomstige maanden
   function populateMonthFilter() {
@@ -22,16 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const today = new Date();
     let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth(); // 0 - 11
+    let currentMonth = today.getMonth();
 
-    // Reset dropdown met alleen de 'Alle maanden' optie
     monthFilter.innerHTML = '<option value="all">Alle maanden</option>';
 
     for (let i = 0; i < 12; i++) {
       const monthNum = (currentMonth % 12) + 1;
       const formattedMonth = String(monthNum).padStart(2, '0');
-      const valueStr = `${currentYear}-${formattedMonth}`; // bijv. "2026-09"
-      const labelStr = `${dutchMonths[currentMonth % 12]} ${currentYear}`; // bijv. "September 2026"
+      const valueStr = `${currentYear}-${formattedMonth}`;
+      const labelStr = `${dutchMonths[currentMonth % 12]} ${currentYear}`;
 
       const option = document.createElement('option');
       option.value = valueStr;
@@ -65,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${shortDays[d.getDay()]} ${day} ${shortMonths[d.getMonth()]} ${year}`;
   }
 
-  // 3. Haversine formule (afstand tussen lat/lon)
+  // 3. Haversine formule (afstand tussen lat/lon in km)
   function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -161,14 +166,20 @@ document.addEventListener('DOMContentLoaded', () => {
     sendHeightToParent();
   }
 
-  // 7. Filteren
+  // 7. Filter logica
   function filterEvents() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedMonth = monthFilter ? monthFilter.value : 'all';
 
-    const checkedCategories = Array.from(distanceCheckboxes)
+    // Afstand categorieën
+    const checkedDistances = Array.from(distanceCheckboxes)
       .filter(cb => cb.checked)
       .map(cb => cb.value);
+
+    // Provincie categorieën
+    const checkedProvinces = Array.from(provinceCheckboxes)
+      .filter(cb => cb.checked)
+      .map(cb => cb.value.toLowerCase());
 
     const filtered = allEvents.filter(e => {
       // Zoekterm filter
@@ -176,53 +187,75 @@ document.addEventListener('DOMContentLoaded', () => {
         e.title.toLowerCase().includes(searchTerm) || 
         e.location.toLowerCase().includes(searchTerm);
 
-      // Maand filter (vergelijkt YYYY-MM)
+      // Maand filter
       const matchesMonth = selectedMonth === 'all' || 
         (e.date && e.date.startsWith(selectedMonth));
 
-      // Afstand checkboxes filter
-      let matchesDistance = false;
-      if (checkedCategories.length === 0) {
-        matchesDistance = false;
-      } else if (checkedCategories.includes('all')) {
-        matchesDistance = true;
-      } else if (e.distances && e.distances.length > 0) {
-        const kms = e.distances.map(d => parseInt(d.replace('km', ''), 10)).filter(n => !isNaN(n));
-        
-        if (kms.length > 0) {
-          const isShort = checkedCategories.includes('short') && kms.some(k => k < 15);
-          const isMedium = checkedCategories.includes('medium') && kms.some(k => k >= 15 && k <= 30);
-          const isLong = checkedCategories.includes('long') && kms.some(k => k > 30);
-
-          matchesDistance = isShort || isMedium || isLong;
-        }
-      } else {
-        matchesDistance = true;
+      // Provincie Checkbox Filter
+      let matchesProvince = false;
+      if (checkedProvinces.length > 0) {
+        const eventProv = (e.province || 'Buitenland').toLowerCase();
+        matchesProvince = checkedProvinces.includes(eventProv);
       }
 
-      return matchesSearch && matchesMonth && matchesDistance;
+      // Afstand Checkbox Filter
+      let matchesDistance = false;
+      if (checkedDistances.length > 0) {
+        if (e.distances && e.distances.length > 0) {
+          const kms = e.distances.map(d => parseInt(d.replace('km', ''), 10)).filter(n => !isNaN(n));
+          
+          if (kms.length > 0) {
+            const isUnder15 = checkedDistances.includes('under_15') && kms.some(k => k < 15);
+            const isUpTo25  = checkedDistances.includes('up_to_25') && kms.some(k => k >= 15 && k <= 25);
+            const isUpTo42  = checkedDistances.includes('up_to_42') && kms.some(k => k > 25 && k <= 42);
+            const isOver42  = checkedDistances.includes('over_42') && kms.some(k => k > 42);
+
+            matchesDistance = isUnder15 || isUpTo25 || isUpTo42 || isOver42;
+          } else {
+            matchesDistance = true;
+          }
+        } else {
+          matchesDistance = true;
+        }
+      }
+
+      return matchesSearch && matchesMonth && matchesProvince && matchesDistance;
     });
 
     renderEvents(filtered);
   }
 
-  // Knoppen: Alles aan / Alles uit
-  if (btnSelectAll) {
-    btnSelectAll.addEventListener('click', () => {
+  // --- KNOPPEN HANDLERS ---
+  // Afstanden Alles Aan / Alles Uit
+  if (btnDistSelectAll) {
+    btnDistSelectAll.addEventListener('click', () => {
       distanceCheckboxes.forEach(cb => cb.checked = true);
       filterEvents();
     });
   }
-
-  if (btnDeselectAll) {
-    btnDeselectAll.addEventListener('click', () => {
+  if (btnDistDeselectAll) {
+    btnDistDeselectAll.addEventListener('click', () => {
       distanceCheckboxes.forEach(cb => cb.checked = false);
       filterEvents();
     });
   }
 
+  // Provincies Alles Aan / Alles Uit
+  if (btnProvSelectAll) {
+    btnProvSelectAll.addEventListener('click', () => {
+      provinceCheckboxes.forEach(cb => cb.checked = true);
+      filterEvents();
+    });
+  }
+  if (btnProvDeselectAll) {
+    btnProvDeselectAll.addEventListener('click', () => {
+      provinceCheckboxes.forEach(cb => cb.checked = false);
+      filterEvents();
+    });
+  }
+
   // --- INITIALISATIE ---
-  populateMonthFilter(); // Vul de maand-dropdown dynamisch
+  populateMonthFilter();
 
   fetch('events.json')
     .then(res => {
@@ -251,7 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (searchInput) searchInput.addEventListener('input', debounceFilter);
   if (userLocationInput) userLocationInput.addEventListener('input', debounceFilter);
   if (monthFilter) monthFilter.addEventListener('change', filterEvents);
+  
   distanceCheckboxes.forEach(cb => cb.addEventListener('change', filterEvents));
+  provinceCheckboxes.forEach(cb => cb.addEventListener('change', filterEvents));
 
   window.addEventListener('resize', sendHeightToParent);
 });
