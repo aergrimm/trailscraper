@@ -1,23 +1,25 @@
 import os
+import json
+import re
 import sys
 import io
-import re
-import json
 import logging
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from datetime import datetime
 
-# Dwing console output naar UTF-8 voor Windows/Actions/NppExec
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+# Dwing console output naar UTF-8 voor Windows/NppExec ondersteuning
+if sys.stdout.encoding.lower() != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+if sys.stderr.encoding.lower() != 'utf-8':
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-HEADERS = {
-    "User-Agent": "TrailScraperBot/1.0 (Production Scraper; +https://aergrimm.github.io/trailscraper/)"
-}
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(BASE_DIR, "config.json")
+OUTPUT_PATH = os.path.join(BASE_DIR, "events.json")
 
 MONTH_MAP = {
     "jan": "01", "januari": "01",
@@ -33,21 +35,6 @@ MONTH_MAP = {
     "nov": "11", "november": "11",
     "dec": "12", "december": "12"
 }
-
-def load_config(config_file="config.json"):
-    """Laadt de scraper-configuratie uit een extern JSON bestand."""
-    if not os.path.exists(config_file):
-        logging.error(f"❌ Configuratiebestand '{config_file}' niet gevonden!")
-        sys.exit(1)
-        
-    try:
-        with open(config_file, "r", encoding="utf-8") as f:
-            config = json.load(f)
-            logging.info(f"⚙️ Configuratie succesvol geladen uit '{config_file}'. ({len(config)} target sites)")
-            return config
-    except Exception as e:
-        logging.error(f"❌ Fout bij het lezen van '{config_file}': {e}")
-        sys.exit(1)
 
 def clean_text(text):
     """Verwijdert vreemde stuurkarakters/emoji-ruis en ruimt spaties op."""
@@ -130,125 +117,171 @@ def normalize_distance(dist_str):
 
     return list(dict.fromkeys(results))
 
-def scrape_site(site_config):
-    site_name = site_config["name"]
-    start_url = site_config["url"]
-    selectors = site_config["selectors"]
-    max_pages = site_config.get("max_pages", 5)
+def infer_province(location_str):
+    """Leidt de Nederlandse provincie af op basis van de locatienaam."""
+    if not location_str or location_str == "Onbekend":
+        return "Buitenland"
     
-    logging.info(f"\n==========================================")
-    logging.info(f"Starten met scrapen van: {site_name}")
-    logging.info(f"==========================================")
+    provinces = [
+        "Drenthe", "Flevoland", "Friesland", "Gelderland", "Groningen",
+        "Limburg", "Noord-Brabant", "Noord-Holland", "Overijssel",
+        "Utrecht", "Zeeland", "Zuid-Holland"
+    ]
+    loc_lower = location_str.lower()
+    for prov in provinces:
+        if prov.lower() in loc_lower:
+            return prov
+    return "Buitenland"
 
+def parse_events_from_page(soup, selectors, current_url):
     events = []
-    current_url = start_url
-    pages_scraped = 0
+    card_selector = selectors.get("event_card")
+    
+    if not card_selector:
+        logging.error("❌ 'event_card' selector is leeg!")
+        return events
 
-    while current_url and pages_scraped < max_pages:
-        pages_scraped += 1
-        logging.info(f"📄 Pagina {pages_scraped} ophalen: {current_url}")
+    card_elements = soup.select(card_selector)
+    
+    for card in card_elements:
+        def get_elem(key):
+            sel = selectors.get(key)
+            return card.select_one(sel) if sel else None
 
-        try:
-            res = requests.get(current_url, headers=HEADERS, timeout=12)
-            res.raise_for_status()
-        except Exception as e:
-            logging.error(f"❌ Fout bij ophalen van {current_url}: {e}")
-            break
+        title_el = get_elem("title")
+        month_el = get_elem("date_month")
+        day_el = get_elem("date_day")
+        loc_el = get_elem("location")
+        date_single_el = get_elem("date_single")
 
-        soup = BeautifulSoup(res.text, 'html.parser')
-        card_selector = selectors.get("event_card")
+        # 1. LINK OPHALEN
+        link_selector = selectors.get("link")
+        link_el = card.select_one(link_selector) if link_selector else card.select_one('a')
+        
+        if not link_el and card.name == 'a':
+            link_el = card
 
-        if not card_selector:
-            logging.warning(f"⚠️ Geen 'event_card' selector ingesteld voor {site_name}")
-            break
+        raw_href = link_el['href'] if (link_el and link_el.has_attr('href')) else ""
+        event_link = urljoin(current_url, raw_href) if raw_href else "Onbekend"
 
-        cards = soup.select(card_selector)
-        logging.info(f"  └─ {len(cards)} event-cards gevonden.")
+        # 2. AFSTANDEN OPHALEN
+        dist_selector = selectors.get("distances")
+        dist_els = card.select(dist_selector) if dist_selector else []
+        distances = []
+        for d in dist_els:
+            raw_text = d.get_text(strip=True)
+            distances.extend(normalize_distance(raw_text))
+        distances = list(dict.fromkeys(distances))
 
-        for card in cards:
-            def get_elem(key):
-                sel = selectors.get(key)
-                return card.select_one(sel) if sel else None
+        # 3. DATUM BEPALEN
+        if date_single_el:
+            raw_date = date_single_el.get_text(strip=True)
+            iso_date = normalize_date(raw_date, link_url=event_link)
+        else:
+            day_text = day_el.get_text(strip=True) if day_el else ""
+            month_text = month_el.get_text(strip=True) if month_el else ""
+            iso_date = normalize_date(day_text, month_str=month_text, link_url=event_link)
 
-            title_el = get_elem("title")
-            month_el = get_elem("date_month")
-            day_el = get_elem("date_day")
-            loc_el = get_elem("location")
-            date_single_el = get_elem("date_single")
+        # 4. TEKSTEN SCHOONMAKEN EN VERZAMELEN
+        raw_loc = loc_el.get_text(strip=True) if loc_el else "Onbekend"
+        clean_loc = clean_text(raw_loc)
+        province = infer_province(clean_loc)
 
-            # 1. Link ophalen
-            link_selector = selectors.get("link")
-            link_el = card.select_one(link_selector) if link_selector else card.select_one('a')
-            if not link_el and card.name == 'a':
-                link_el = card
+        title = title_el.get_text(strip=True) if title_el else "Onbekend"
 
-            raw_href = link_el['href'] if (link_el and link_el.has_attr('href')) else ""
-            event_link = urljoin(current_url, raw_href) if raw_href else ""
-
-            # 2. Afstanden ophalen
-            dist_selector = selectors.get("distances")
-            dist_els = card.select(dist_selector) if dist_selector else []
-            distances = []
-            for d in dist_els:
-                raw_text = d.get_text(strip=True)
-                distances.extend(normalize_distance(raw_text))
-            distances = list(dict.fromkeys(distances))
-
-            # 3. Datum bepalen
-            if date_single_el:
-                raw_date = date_single_el.get_text(strip=True)
-                iso_date = normalize_date(raw_date, link_url=event_link)
-            else:
-                day_text = day_el.get_text(strip=True) if day_el else ""
-                month_text = month_el.get_text(strip=True) if month_text else ""
-                raw_date = f"{day_text} {month_text}".strip() if (day_text or month_text) else ""
-                iso_date = normalize_date(day_text, month_str=month_text, link_url=event_link)
-
-            # 4. Velden opschonen
-            title_text = title_el.get_text(strip=True) if title_el else "Onbekend"
-            raw_loc = loc_el.get_text(strip=True) if loc_el else "Onbekend"
-            clean_loc = clean_text(raw_loc)
-
-            events.append({
-                "title": clean_text(title_text),
+        if title and title != "Onbekend":
+            event_data = {
+                "title": title,
                 "date": iso_date,
                 "location": clean_loc if clean_loc else "Onbekend",
+                "province": province,
                 "distances": distances,
-                "link": event_link if event_link else "Onbekend",
-                "source": site_name
-            })
+                "link": event_link
+            }
+            events.append(event_data)
+        
+    return events
 
-        # Zoek 'volgende' knop
-        next_selector = selectors.get("next_page")
-        if next_selector:
-            next_btn = soup.select_one(next_selector)
-            if next_btn and next_btn.get('href'):
-                current_url = urljoin(current_url, next_btn['href'])
-            else:
-                current_url = None
+def find_next_page_url(soup, current_url, selectors):
+    next_selector = selectors.get("next_page")
+    if not next_selector:
+        return None
+
+    next_btn = soup.select_one(next_selector)
+    if next_btn and next_btn.get('href'):
+        return urljoin(current_url, next_btn['href'])
+    return None
+
+def scrape_site(site_config):
+    site_name = site_config.get("name", "Onbekende site")
+    url = site_config.get("url")
+    enabled = site_config.get("enabled", True)
+    custom_headers = site_config.get("headers", {})
+
+    if not enabled:
+        logging.info(f"⏭️ Overgeslagen (disabled): {site_name}")
+        return []
+
+    headers = {
+        "User-Agent": "TrailScraperBot/1.0 (+https://aergrimm.github.io/trailscraper/)"
+    }
+    if custom_headers and isinstance(custom_headers, dict):
+        headers.update(custom_headers)
+
+    logging.info(f"🔍 Scraping starten voor: {site_name} ({url})")
+    
+    current_url = url
+    selectors = site_config.get("selectors", {})
+    all_site_events = []
+    pages_processed = 0
+    max_pages = 20  # Veiligheidslimiet voor paginering
+
+    while current_url and pages_processed < max_pages:
+        pages_processed += 1
+        logging.info(f"--- [ PAGINA {pages_processed} ] Ophalen: {current_url} ---")
+        
+        try:
+            response = requests.get(current_url, headers=headers, timeout=15)
+            response.raise_for_status()
+        except Exception as e:
+            logging.error(f"Fout bij ophalen pagina {current_url}: {e}")
+            break
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+        events = parse_events_from_page(soup, selectors, current_url)
+        all_site_events.extend(events)
+        
+        logging.info(f"{len(events)} events gevonden op pagina {pages_processed}.")
+
+        # Volgende pagina zoeken
+        next_url = find_next_page_url(soup, current_url, selectors)
+        if next_url and next_url != current_url:
+            current_url = next_url
         else:
             current_url = None
 
-    return events
+    return all_site_events
 
 def main():
-    target_sites = load_config("config.json")
+    if not os.path.exists(CONFIG_PATH):
+        logging.error(f"❌ Configuratiebestand niet gevonden op pad: '{CONFIG_PATH}'")
+        return
+
+    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    scrapers = config.get("scrapers", [])
+    logging.info(f"⚙️ Configuratie succesvol geladen uit 'config.json'. ({len(scrapers)} scrapers gevonden)")
+
     all_events = []
-    
-    for site in target_sites:
-        site_events = scrape_site(site)
-        all_events.extend(site_events)
+    for site_config in scrapers:
+        events = scrape_site(site_config)
+        all_events.extend(events)
 
-    logging.info(f"\n==========================================")
-    logging.info(f"Totaal geparste events over alle sites: {len(all_events)}")
-    logging.info(f"==========================================")
-
-    # Exporteer naar events.json
-    output_path = "events.json"
-    with open(output_path, "w", encoding="utf-8") as f:
+    with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(all_events, f, ensure_ascii=False, indent=2)
 
-    logging.info(f"✅ Succesvol geëxporteerd naar '{output_path}'!")
+    logging.info(f"✅ Totaal {len(all_events)} evenementen opgeslagen in '{OUTPUT_PATH}'.")
 
 if __name__ == "__main__":
     main()
