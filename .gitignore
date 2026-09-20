@@ -2,3 +2,6 @@ venv/
 __pycache__/
 .vscode/
 *.ps1
+events.json
+trail_events.ics
+trail_events.xml
