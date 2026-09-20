@@ -29,7 +29,7 @@ jobs:
           pip install beautifulsoup4 requests feedgen icalendar python-dateutil
 
       - name: Scraper uitvoeren
-        run: python scraper.py
+        run: python trailscraper.py
 
       - name: Automatisch resultaten opslaan in Git
         run: |
