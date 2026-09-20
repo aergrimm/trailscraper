@@ -1,13 +1,51 @@
 document.addEventListener('DOMContentLoaded', () => {
   let allEvents = [];
+  const geocodeCache = {};
 
   // DOM elementen
   const eventsContainer = document.getElementById('events-container');
   const searchInput = document.getElementById('search-input');
-  const distanceFilter = document.getElementById('distance-filter');
+  const userLocationInput = document.getElementById('user-location');
   const monthFilter = document.getElementById('month-filter');
+  const distanceCheckboxes = document.querySelectorAll('.dist-checkbox');
+  const btnSelectAll = document.getElementById('btn-select-all');
+  const btnDeselectAll = document.getElementById('btn-deselect-all');
 
-  // 1. Datum formatter: zet 'YYYY-MM-DD' om naar 'za 20 sep 2026'
+  // 1. Maandfilter dynamisch vullen: Huidige maand + 11 toekomstige maanden
+  function populateMonthFilter() {
+    if (!monthFilter) return;
+
+    const dutchMonths = [
+      "Januari", "Februari", "Maart", "April", "Mei", "Juni",
+      "Juli", "Augustus", "September", "Oktober", "November", "December"
+    ];
+
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth(); // 0 - 11
+
+    // Reset dropdown met alleen de 'Alle maanden' optie
+    monthFilter.innerHTML = '<option value="all">Alle maanden</option>';
+
+    for (let i = 0; i < 12; i++) {
+      const monthNum = (currentMonth % 12) + 1;
+      const formattedMonth = String(monthNum).padStart(2, '0');
+      const valueStr = `${currentYear}-${formattedMonth}`; // bijv. "2026-09"
+      const labelStr = `${dutchMonths[currentMonth % 12]} ${currentYear}`; // bijv. "September 2026"
+
+      const option = document.createElement('option');
+      option.value = valueStr;
+      option.textContent = labelStr;
+      monthFilter.appendChild(option);
+
+      currentMonth++;
+      if (currentMonth % 12 === 0) {
+        currentYear++;
+      }
+    }
+  }
+
+  // 2. Datum formatter: YYYY-MM-DD -> za 20 sep 2026
   function formatDutchDate(isoDateStr) {
     if (!isoDateStr || isoDateStr === "Onbekend") return "Datum onbekend";
 
@@ -15,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (parts.length !== 3) return isoDateStr;
 
     const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; // Maanden zijn 0-indexed in JS
+    const month = parseInt(parts[1], 10) - 1;
     const day = parseInt(parts[2], 10);
 
     const d = new Date(year, month, day);
@@ -24,13 +62,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const shortDays = ["zo", "ma", "di", "wo", "do", "vr", "za"];
     const shortMonths = ["jan", "feb", "mar", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"];
 
-    const dayName = shortDays[d.getDay()];
-    const monthName = shortMonths[d.getMonth()];
-
-    return `${dayName} ${day} ${monthName} ${year}`;
+    return `${shortDays[d.getDay()]} ${day} ${shortMonths[d.getMonth()]} ${year}`;
   }
 
-  // 2. Automatisering voor iframe hoogte (handig voor WordPress integratie)
+  // 3. Haversine formule (afstand tussen lat/lon)
+  function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Math.round(R * c);
+  }
+
+  // 4. Geocoding via OpenStreetMap (Nominatim API)
+  async function geocodeAddress(query) {
+    if (!query) return null;
+    const cleanQuery = query.toLowerCase().trim();
+    if (geocodeCache[cleanQuery]) return geocodeCache[cleanQuery];
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1`;
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'TrailscraperApp/1.0' }
+      });
+      const data = await res.json();
+      if (data && data.length > 0) {
+        const coords = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+        geocodeCache[cleanQuery] = coords;
+        return coords;
+      }
+    } catch (err) {
+      console.warn(`Geocoding fout voor '${query}':`, err);
+    }
+    return null;
+  }
+
+  // 5. Automatisering voor iframe hoogte
   function sendHeightToParent() {
     if (window.parent && window.parent !== window) {
       const height = document.body.scrollHeight;
@@ -38,8 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 3. Events renderen op de pagina
-  function renderEvents(events) {
+  // 6. Events renderen
+  async function renderEvents(events) {
     if (!eventsContainer) return;
 
     if (events.length === 0) {
@@ -48,18 +119,33 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    eventsContainer.innerHTML = events.map(e => {
+    const userCity = userLocationInput ? userLocationInput.value.trim() : 'Utrecht';
+    const userCoords = await geocodeAddress(userCity || 'Utrecht');
+
+    const cardsHtml = await Promise.all(events.map(async e => {
       const humanReadableDate = formatDutchDate(e.date);
-      
       const distText = e.distances && e.distances.length > 0 
         ? e.distances.join(', ') 
         : 'Afstand onbekend';
+
+      let travelDistBadge = '';
+      if (userCoords) {
+        let eventCoords = (e.lat && e.lon) ? { lat: e.lat, lon: e.lon } : null;
+        if (!eventCoords && e.location && e.location !== "Onbekend") {
+          eventCoords = await geocodeAddress(e.location);
+        }
+
+        if (eventCoords) {
+          const km = calculateHaversineDistance(userCoords.lat, userCoords.lon, eventCoords.lat, eventCoords.lon);
+          travelDistBadge = ` <span class="travel-distance">(±${km} km vanaf ${userCity})</span>`;
+        }
+      }
 
       return `
         <div class="trail-event-card">
           <h3>${e.title}</h3>
           <div class="trail-event-meta">
-            📅 <strong>${humanReadableDate}</strong> | 📍 ${e.location}
+            📅 <strong>${humanReadableDate}</strong> | 📍 ${e.location}${travelDistBadge}
           </div>
           <div class="trail-event-distances">
             🏃 ${distText}
@@ -69,19 +155,23 @@ document.addEventListener('DOMContentLoaded', () => {
             : ''}
         </div>
       `;
-    }).join('');
+    }));
 
+    eventsContainer.innerHTML = cardsHtml.join('');
     sendHeightToParent();
   }
 
-  // 4. Filters toepassen
+  // 7. Filteren
   function filterEvents() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const selectedDistance = distanceFilter ? distanceFilter.value : 'all';
     const selectedMonth = monthFilter ? monthFilter.value : 'all';
 
+    const checkedCategories = Array.from(distanceCheckboxes)
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
+
     const filtered = allEvents.filter(e => {
-      // Zoekterm filter (titel & locatie)
+      // Zoekterm filter
       const matchesSearch = !searchTerm || 
         e.title.toLowerCase().includes(searchTerm) || 
         e.location.toLowerCase().includes(searchTerm);
@@ -90,21 +180,24 @@ document.addEventListener('DOMContentLoaded', () => {
       const matchesMonth = selectedMonth === 'all' || 
         (e.date && e.date.startsWith(selectedMonth));
 
-      // Afstand filter
-      let matchesDistance = true;
-      if (selectedDistance !== 'all' && e.distances && e.distances.length > 0) {
-        // Haal alle numerieke afstanden op uit de array ['10km', '20km'] -> [10, 20]
+      // Afstand checkboxes filter
+      let matchesDistance = false;
+      if (checkedCategories.length === 0) {
+        matchesDistance = false;
+      } else if (checkedCategories.includes('all')) {
+        matchesDistance = true;
+      } else if (e.distances && e.distances.length > 0) {
         const kms = e.distances.map(d => parseInt(d.replace('km', ''), 10)).filter(n => !isNaN(n));
         
         if (kms.length > 0) {
-          if (selectedDistance === 'short') { // < 15 km
-            matchesDistance = kms.some(k => k < 15);
-          } else if (selectedDistance === 'medium') { // 15 - 30 km
-            matchesDistance = kms.some(k => k >= 15 && k <= 30);
-          } else if (selectedDistance === 'long') { // > 30 km
-            matchesDistance = kms.some(k => k > 30);
-          }
+          const isShort = checkedCategories.includes('short') && kms.some(k => k < 15);
+          const isMedium = checkedCategories.includes('medium') && kms.some(k => k >= 15 && k <= 30);
+          const isLong = checkedCategories.includes('long') && kms.some(k => k > 30);
+
+          matchesDistance = isShort || isMedium || isLong;
         }
+      } else {
+        matchesDistance = true;
       }
 
       return matchesSearch && matchesMonth && matchesDistance;
@@ -113,30 +206,52 @@ document.addEventListener('DOMContentLoaded', () => {
     renderEvents(filtered);
   }
 
-  // 5. Data ophalen uit events.json
+  // Knoppen: Alles aan / Alles uit
+  if (btnSelectAll) {
+    btnSelectAll.addEventListener('click', () => {
+      distanceCheckboxes.forEach(cb => cb.checked = true);
+      filterEvents();
+    });
+  }
+
+  if (btnDeselectAll) {
+    btnDeselectAll.addEventListener('click', () => {
+      distanceCheckboxes.forEach(cb => cb.checked = false);
+      filterEvents();
+    });
+  }
+
+  // --- INITIALISATIE ---
+  populateMonthFilter(); // Vul de maand-dropdown dynamisch
+
   fetch('events.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP fout! Status: ${response.status}`);
-      }
-      return response.json();
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
     })
     .then(data => {
       allEvents = data;
       renderEvents(allEvents);
     })
-    .catch(error => {
-      console.error('Fout bij het laden van events.json:', error);
+    .catch(err => {
+      console.error('Fout bij laden van events.json:', err);
       if (eventsContainer) {
-        eventsContainer.innerHTML = '<div class="error-msg">Kan de evenementen op dit moment niet laden.</div>';
+        eventsContainer.innerHTML = '<div class="error-msg">Kan evenementen niet laden.</div>';
       }
     });
 
-  // Event listeners voor live filtering
-  if (searchInput) searchInput.addEventListener('input', filterEvents);
-  if (distanceFilter) distanceFilter.addEventListener('change', filterEvents);
-  if (monthFilter) monthFilter.addEventListener('change', filterEvents);
+  // Debounce voor soepel typen
+  let timeoutId;
+  function debounceFilter() {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(filterEvents, 400);
+  }
 
-  // Pas iframe hoogte aan bij verandering van venstergrootte
+  // Event Listeners
+  if (searchInput) searchInput.addEventListener('input', debounceFilter);
+  if (userLocationInput) userLocationInput.addEventListener('input', debounceFilter);
+  if (monthFilter) monthFilter.addEventListener('change', filterEvents);
+  distanceCheckboxes.forEach(cb => cb.addEventListener('change', filterEvents));
+
   window.addEventListener('resize', sendHeightToParent);
 });

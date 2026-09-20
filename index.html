@@ -12,33 +12,43 @@
     
     <!-- Filterbalk -->
     <div class="filter-container">
-      <div class="filter-group">
-        <input type="text" id="search-input" placeholder="Zoek op titel of locatie...">
+      
+      <!-- Rij 1: Zoekterm, Vertrekplaats & Maand -->
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="search-input">Zoeken:</label>
+          <input type="text" id="search-input" placeholder="Zoek op titel of locatie...">
+        </div>
+
+        <div class="filter-group">
+          <label for="user-location">Afstand berekenen vanaf:</label>
+          <input type="text" id="user-location" value="Utrecht" placeholder="Bijv. Utrecht, Amsterdam...">
+        </div>
+
+        <div class="filter-group">
+          <label for="month-filter">Maand:</label>
+          <select id="month-filter">
+            <option value="all">Alle maanden</option>
+            <!-- Wordt automatisch gevuld door app.js -->
+          </select>
+        </div>
       </div>
 
-      <div class="filter-group">
-        <select id="distance-filter">
-          <option value="all">Alle afstanden</option>
-          <option value="short">Kort (&lt; 15 km)</option>
-          <option value="medium">Middel (15 - 30 km)</option>
-          <option value="long">Lang (&gt; 30 km)</option>
-        </select>
+      <!-- Rij 2: Afstand Checkboxes & Snelknoppen -->
+      <div class="filter-row checkbox-row">
+        <span class="filter-label">Afstanden:</span>
+        <div class="checkbox-group">
+          <label><input type="checkbox" class="dist-checkbox" value="short" checked> Kort (&lt; 15 km)</label>
+          <label><input type="checkbox" class="dist-checkbox" value="medium" checked> Middel (15 - 30 km)</label>
+          <label><input type="checkbox" class="dist-checkbox" value="long" checked> Lang (&gt; 30 km)</label>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" id="btn-select-all" class="btn-select">Alles aan</button>
+          <button type="button" id="btn-deselect-all" class="btn-select">Alles uit</button>
+        </div>
       </div>
 
-      <div class="filter-group">
-        <select id="month-filter">
-          <option value="all">Alle maanden</option>
-          <option value="2026-04">April 2026</option>
-          <option value="2026-05">Mei 2026</option>
-          <option value="2026-06">Juni 2026</option>
-          <option value="2026-07">Juli 2026</option>
-          <option value="2026-08">Augustus 2026</option>
-          <option value="2026-09">September 2026</option>
-          <option value="2026-10">Oktober 2026</option>
-          <option value="2026-11">November 2026</option>
-          <option value="2026-12">December 2026</option>
-        </select>
-      </div>
     </div>
 
     <!-- Container voor evenementen -->
@@ -46,7 +56,6 @@
 
   </div>
 
-  <!-- JavaScript koppeling -->
   <script src="app.js"></script>
 </body>
 </html>
