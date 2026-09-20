@@ -32,92 +32,98 @@ def clean_text_no_icons(text):
 
 def get_location_details(raw_location_str):
     """
-    Analyseert en verrijkt een locatie via OpenStreetMap Nominatim.
-    Schoont dubbelingen op en levert losse velden (city, province, country).
+    Haalt locatiegegevens op via Nominatim en print het resultaat rechtstreeks naar de console.
     """
     clean_input = clean_text_no_icons(raw_location_str)
-    if not clean_input or clean_input == "Onbekende locatie":
-        return {
-            "formatted": "Onbekende locatie",
-            "city": "Onbekend",
-            "province": "Onbekend",
-            "country": "Nederland",
-            "lat": None,
-            "lon": None
-        }
     
-    if clean_input in GEO_CACHE:
-        return GEO_CACHE[clean_input]
-
-    try:
-        headers = {"User-Agent": "TrailCalendarScraper/1.0 (info@example.com)"}
-        query_str = f"{clean_input}, Nederland" if "nederland" not in clean_input.lower() else clean_input
-        url = f"https://nominatim.openstreetmap.org/search?format=json&q={quote(query_str)}&addressdetails=1&limit=1"
-        
-        response = requests.get(url, headers=headers, timeout=5)
-        time.sleep(1) # Eerbiedig de Nominatim API rate limit (max 1 req/sec)
-
-        if response.status_code == 200 and response.json():
-            data = response.json()[0]
-            address = data.get("address", {})
-            
-            # 1. Plaats bepalen (stad, dorp, gemeente)
-            city = (
-                address.get("village") or 
-                address.get("town") or 
-                address.get("city") or 
-                address.get("municipality") or 
-                clean_input.split(",")[0].strip()
-            )
-
-            # 2. Provincie bepalen
-            province = (
-                address.get("state") or 
-                address.get("province") or 
-                address.get("region") or 
-                "Onbekend"
-            )
-
-            # 3. Land bepalen
-            country = address.get("country") or "Nederland"
-
-            # 4. GPS Coördinaten
-            lat = float(data.get("lat")) if data.get("lat") else None
-            lon = float(data.get("lon")) if data.get("lon") else None
-
-            # 5. Geformatteerde locatiestring opbouwen (bijv. "Stramproy, Limburg")
-            loc_parts = []
-            if city and city != "Onbekend":
-                loc_parts.append(city)
-            if province and province != "Onbekend" and province.lower() not in city.lower():
-                loc_parts.append(province)
-            
-            formatted_location = ", ".join(loc_parts) if loc_parts else clean_input
-
-            result = {
-                "formatted": formatted_location,
-                "city": city,
-                "province": province,
-                "country": country,
-                "lat": lat,
-                "lon": lon
-            }
-            GEO_CACHE[clean_input] = result
-            return result
-    except Exception:
-        pass
-
-    # Fallback als OSM niets vindt
-    fallback = {
-        "formatted": clean_input,
-        "city": clean_input.split(",")[0].strip() if clean_input else "Onbekend",
+    empty_debug = {
+        "formatted": clean_input or "Onbekende locatie",
+        "city": "Onbekend",
         "province": "Onbekend",
         "country": "Nederland",
         "lat": None,
-        "lon": None
+        "lon": None,
+        "osm_url": "N/A",
+        "osm_village": "N/A",
+        "osm_state": "N/A",
+        "osm_country": "N/A",
+        "osm_raw_address": {}
     }
-    GEO_CACHE[clean_input] = fallback
-    return fallback
+
+    if not clean_input or clean_input == "Onbekende locatie":
+        print(f"⚠️ [OSM DEBUG] Geen geldige locatie om te zoeken: '{raw_location_str}'")
+        return empty_debug
+    
+    if clean_input in GEO_CACHE:
+        print(f"⚡ [OSM DEBUG] Ophalen uit cache voor: '{clean_input}'")
+        return GEO_CACHE[clean_input]
+
+    try:
+        headers = {"User-Agent": "TrailCalendar/1.0 (info@aergrimm.nl)"}
+        query_str = f"{clean_input}, Nederland" if "nederland" not in clean_input.lower() else clean_input
+        url = f"https://nominatim.openstreetmap.org/search?format=json&q={quote(query_str)}&addressdetails=1&limit=1"
+        
+        print(f"\n🌐 [OSM REQUEST] Zoeken naar: '{clean_input}'")
+        print(f"🔗 URL: {url}")
+        
+        response = requests.get(url, headers=headers, timeout=5)
+        time.sleep(2) # Volg de rate-limit van 1 verzoek per seconde
+
+        print(f"📡 Status Code: {response.status_code}")
+
+        if response.status_code == 200:
+            json_data = response.json()
+            print("📦 [OSM RESPONSE JSON]:")
+            print(json.dumps(json_data, indent=2, ensure_ascii=False))
+
+            if json_data:
+                data = json_data[0]
+                address = data.get("address", {})
+                
+                village_val = (
+                    address.get("village") or 
+                    address.get("town") or 
+                    address.get("city") or 
+                    address.get("municipality") or 
+                    "N/A"
+                )
+
+                state_val = address.get("state") or address.get("province") or "N/A"
+                country_val = address.get("country") or "N/A"
+
+                lat = float(data.get("lat")) if data.get("lat") else None
+                lon = float(data.get("lon")) if data.get("lon") else None
+
+                province = state_val if state_val != "N/A" else "Onbekend"
+                city = village_val if village_val != "N/A" else clean_input.split(",")[0].strip()
+
+                formatted_location = f"{city}, {province}" if province != "Onbekend" else city
+
+                result = {
+                    "formatted": formatted_location,
+                    "city": city,
+                    "province": province,
+                    "country": country_val if country_val != "N/A" else "Nederland",
+                    "lat": lat,
+                    "lon": lon,
+                    "osm_url": url,
+                    "osm_village": village_val,
+                    "osm_state": state_val,
+                    "osm_country": country_val,
+                    "osm_raw_address": address
+                }
+                GEO_CACHE[clean_input] = result
+                return result
+            else:
+                print("❌ [OSM DEBUG] Geen resultaten gevonden (lege array returned).")
+        else:
+            print(f"❌ [OSM DEBUG] Foutmelding van server: {response.text}")
+
+    except Exception as e:
+        print(f"💥 [OSM EXCEPTION]: {str(e)}")
+
+    GEO_CACHE[clean_input] = empty_debug
+    return empty_debug
 
 def is_similar_title(a, b, threshold=0.75):
     """Berekent of twee titels op elkaar lijken (0.0 tot 1.0)."""

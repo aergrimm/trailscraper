@@ -5,116 +5,117 @@ BEGIN:VEVENT
 SUMMARY:Zevenheuvelentrail [56k\, 42k\, 28k\, 21k\, 14k\, 7k]
 DTSTART;VALUE=DATE:20260926
 DTEND;VALUE=DATE:20260926
-UID:2026-09-26--6829279551017007504@trailscraper
-DESCRIPTION:Locatie: Nijmegen\nAfstanden: 56k\, 42k\, 28k\, 21k\, 14k\, 7k
- \nBron: BeTrailNL\nLink: 
-LOCATION:Nijmegen
+UID:2026-09-26-6545366452590489736@trailscraper
+DESCRIPTION:Locatie: Nijmegen\, Gelderland\nAfstanden: 56k\, 42k\, 28k\, 2
+ 1k\, 14k\, 7k\nBron: BeTrailNL\nLink: 
+LOCATION:Nijmegen\, Gelderland
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Devil's Trail Utrechtse Heuvelrug [160k\, 36k\, 26k\, 16k\, 8k]
 DTSTART;VALUE=DATE:20261003
 DTEND;VALUE=DATE:20261003
-UID:2026-10-03-2459008472215101250@trailscraper
-DESCRIPTION:Locatie: Doorn\nAfstanden: 160k\, 36k\, 26k\, 16k\, 8k\nBron: 
- BeTrailNL\nLink: 
-LOCATION:Doorn
+UID:2026-10-03-2998398737294623819@trailscraper
+DESCRIPTION:Locatie: Doorn\, Utrecht\nAfstanden: 160k\, 36k\, 26k\, 16k\, 
+ 8k\nBron: BeTrailNL\nLink: 
+LOCATION:Doorn\, Utrecht
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Alpina Limburg Wine Run [20k\, 15k\, 10k]
 DTSTART;VALUE=DATE:20261003
 DTEND;VALUE=DATE:20261003
-UID:2026-10-03--7089291269467782406@trailscraper
-DESCRIPTION:Locatie: Wijlre\nAfstanden: 20k\, 15k\, 10k\nBron: BeTrailNL\n
- Link: 
-LOCATION:Wijlre
+UID:2026-10-03--147200452740278938@trailscraper
+DESCRIPTION:Locatie: Wijlre\, Limburg\nAfstanden: 20k\, 15k\, 10k\nBron: B
+ eTrailNL\nLink: 
+LOCATION:Wijlre\, Limburg
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Indian Summer Ultra Trail [100k\, 75k\, 50k]
 DTSTART;VALUE=DATE:20261010
 DTEND;VALUE=DATE:20261010
-UID:2026-10-10-4170853477479197728@trailscraper
-DESCRIPTION:Locatie: Gasselte\nAfstanden: 100k\, 75k\, 50k\nBron: BeTrailN
- L\nLink: 
-LOCATION:Gasselte
+UID:2026-10-10-2995752275485685675@trailscraper
+DESCRIPTION:Locatie: Gasselte\, Drenthe\nAfstanden: 100k\, 75k\, 50k\nBron
+ : BeTrailNL\nLink: 
+LOCATION:Gasselte\, Drenthe
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:RunForestRun Indian Summer [27k\, 12k]
 DTSTART;VALUE=DATE:20261010
 DTEND;VALUE=DATE:20261010
-UID:2026-10-10-593565468225458265@trailscraper
-DESCRIPTION:Locatie: Gasselte\nAfstanden: 27k\, 12k\nBron: BeTrailNL\nLink
- : 
-LOCATION:Gasselte
+UID:2026-10-10--7898832465274210272@trailscraper
+DESCRIPTION:Locatie: Gasselte\, Drenthe\nAfstanden: 27k\, 12k\nBron: BeTra
+ ilNL\nLink: 
+LOCATION:Gasselte\, Drenthe
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Posbank Trail & Walk [24k\, 15k\, 7k]
 DTSTART;VALUE=DATE:20261024
 DTEND;VALUE=DATE:20261024
-UID:2026-10-24-5504441010138879327@trailscraper
-DESCRIPTION:Locatie: Velp\nAfstanden: 24k\, 15k\, 7k\nBron: BeTrailNL\nLin
- k: 
-LOCATION:Velp
+UID:2026-10-24-2031514670706027965@trailscraper
+DESCRIPTION:Locatie: Velp\, Gelderland\nAfstanden: 24k\, 15k\, 7k\nBron: B
+ eTrailNL\nLink: 
+LOCATION:Velp\, Gelderland
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Duinentrail Schoorl [52k\, 38k\, 19k\, 12k]
 DTSTART;VALUE=DATE:20261024
 DTEND;VALUE=DATE:20261024
-UID:2026-10-24-192140627082779060@trailscraper
-DESCRIPTION:Locatie: Schoorl\nAfstanden: 52k\, 38k\, 19k\, 12k\nBron: BeTr
- ailNL\nLink: 
-LOCATION:Schoorl
+UID:2026-10-24--3514287165428518721@trailscraper
+DESCRIPTION:Locatie: Schoorl\, Noord-Holland\nAfstanden: 52k\, 38k\, 19k\,
+  12k\nBron: BeTrailNL\nLink: 
+LOCATION:Schoorl\, Noord-Holland
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Devil’s Trail Rijk van Nijmegen [33k\, 22k\, 12k]
 DTSTART;VALUE=DATE:20261025
 DTEND;VALUE=DATE:20261025
-UID:2026-10-25--3704088106586781485@trailscraper
-DESCRIPTION:Locatie: Berg en Dal\nAfstanden: 33k\, 22k\, 12k\nBron: BeTrai
- lNL\nLink: 
-LOCATION:Berg en Dal
+UID:2026-10-25--2399453549820869413@trailscraper
+DESCRIPTION:Locatie: Berg en Dal\, Gelderland\nAfstanden: 33k\, 22k\, 12k
+ \nBron: BeTrailNL\nLink: 
+LOCATION:Berg en Dal\, Gelderland
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:VechtdalTrail [50k\, 34k\, 24k\, 15k]
 DTSTART;VALUE=DATE:20261031
 DTEND;VALUE=DATE:20261031
-UID:2026-10-31--6385175305783037018@trailscraper
-DESCRIPTION:Locatie: Ommen\nAfstanden: 50k\, 34k\, 24k\, 15k\nBron: BeTrai
- lNL\nLink: 
-LOCATION:Ommen
+UID:2026-10-31-2859898726042021839@trailscraper
+DESCRIPTION:Locatie: Ommen\, Overijssel\nAfstanden: 50k\, 34k\, 24k\, 15k
+ \nBron: BeTrailNL\nLink: 
+LOCATION:Ommen\, Overijssel
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Devil’s Trail Schiermonnikoog [30k\, 15k\, 10k\, 3k]
 DTSTART;VALUE=DATE:20261106
 DTEND;VALUE=DATE:20261106
-UID:2026-11-06-6650399917750209109@trailscraper
-DESCRIPTION:Locatie: Schiermonnikoog\nAfstanden: 30k\, 15k\, 10k\, 3k\nBro
- n: BeTrailNL\nLink: 
-LOCATION:Schiermonnikoog
+UID:2026-11-06--3480499096188053606@trailscraper
+DESCRIPTION:Locatie: Schiermonnikoog\, Fryslân\nAfstanden: 30k\, 15k\, 10
+ k\, 3k\nBron: BeTrailNL\nLink: 
+LOCATION:Schiermonnikoog\, Fryslân
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Athlos Hydro Trail Run Harderwijk [43k\, 30k\, 22k\, 12k]
 DTSTART;VALUE=DATE:20261107
 DTEND;VALUE=DATE:20261107
-UID:2026-11-07-8861981685926738840@trailscraper
-DESCRIPTION:Locatie: Harderwijk\nAfstanden: 43k\, 30k\, 22k\, 12k\nBron: B
- eTrailNL\nLink: 
-LOCATION:Harderwijk
+UID:2026-11-07-3180502106001152872@trailscraper
+DESCRIPTION:Locatie: Harderwijk\, Gelderland\nAfstanden: 43k\, 30k\, 22k\,
+  12k\nBron: BeTrailNL\nLink: 
+LOCATION:Harderwijk\, Gelderland
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:RunForestRun Holtingerveld [30k\, 21k\, 11k]
 DTSTART;VALUE=DATE:20261107
 DTEND;VALUE=DATE:20261107
-UID:2026-11-07-6806662284849949013@trailscraper
-DESCRIPTION:Locatie: Havelte\nAfstanden: 30k\, 21k\, 11k\nBron: BeTrailNL
- \nLink: 
-LOCATION:Havelte
+UID:2026-11-07--2236520056494192583@trailscraper
+DESCRIPTION:Locatie: Havelte\, Drenthe\nAfstanden: 30k\, 21k\, 11k\nBron: 
+ BeTrailNL\nLink: 
+LOCATION:Havelte\, Drenthe
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Watersley Halloween Trail
 DTSTART;VALUE=DATE:20261107
 DTEND;VALUE=DATE:20261107
-UID:2026-11-07--7207717404699896783@trailscraper
-DESCRIPTION:Locatie: Sittard\nAfstanden: \nBron: BeTrailNL\nLink: 
-LOCATION:Sittard
+UID:2026-11-07--6498179935931781041@trailscraper
+DESCRIPTION:Locatie: Sittard\, Limburg\nAfstanden: \nBron: BeTrailNL\nLink
+ : 
+LOCATION:Sittard\, Limburg
 END:VEVENT
 END:VCALENDAR
