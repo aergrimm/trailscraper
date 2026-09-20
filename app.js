@@ -1,5 +1,5 @@
 let allTrailEvents = [];
-let userLat = 52.0907; // Standaard GPS Utrecht
+let userLat = 52.0907; // Standaard Utrecht GPS
 let userLon = 5.1214;
 let allProvincesChecked = true;
 
@@ -11,7 +11,6 @@ const PROVINCES = [
 
 const jsonUrl = './events.json';
 
-// Functie die direct de data gaat ophalen
 function initApp() {
   console.log("🚀 [TRAILSCRAPER] App initialiseren...");
   buildProvinceCheckboxes();
@@ -39,11 +38,21 @@ function initApp() {
     });
 }
 
-// Zorg dat de app start, ongeacht wanneer het script geladen wordt
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
   initApp();
+}
+
+function sendHeight() {
+  try {
+    const height = document.body.scrollHeight;
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ frameHeight: height }, '*');
+    }
+  } catch (e) {
+    console.warn("Kon iframe hoogte niet versturen:", e);
+  }
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -128,65 +137,74 @@ function updateToggleBtnState() {
 function filterEvents() {
   if (!allTrailEvents || allTrailEvents.length === 0) return;
 
-  const maxRadiusEl = document.getElementById('maxRadius');
-  const maxRadius = maxRadiusEl ? parseFloat(maxRadiusEl.value) : 9999;
+  try {
+    const maxRadiusEl = document.getElementById('maxRadius');
+    const maxRadius = maxRadiusEl ? parseFloat(maxRadiusEl.value) : 9999;
 
-  const selectedMonth = document.getElementById('monthFilter').value;
-  const distCategory = document.getElementById('distanceFilter').value;
-  const searchQuery = document.getElementById('searchFilter').value.toLowerCase();
-  
-  const checkedBoxes = document.querySelectorAll('.prov-cb:checked');
-  const checkedProvinces = Array.from(checkedBoxes).map(cb => cb.value.toLowerCase().trim());
+    const monthEl = document.getElementById('monthFilter');
+    const selectedMonth = monthEl ? monthEl.value : 'all';
 
-  const filtered = allTrailEvents.filter(event => {
-    // 1. Zoekbalk filter
-    const titleMatch = event.title ? event.title.toLowerCase().includes(searchQuery) : false;
-    const locMatch = event.location ? event.location.toLowerCase().includes(searchQuery) : false;
-    if (searchQuery && !titleMatch && !locMatch) return false;
+    const distEl = document.getElementById('distanceFilter');
+    const distCategory = distEl ? distEl.value : 'all';
 
-    // 2. Provincie filter
-    const rawProv = event.province ? event.province.toLowerCase().trim() : "";
-    if (rawProv && rawProv !== "onbekend") {
-      if (!checkedProvinces.includes(rawProv)) {
+    const searchEl = document.getElementById('searchFilter');
+    const searchQuery = searchEl ? searchEl.value.toLowerCase() : '';
+    
+    const checkedBoxes = document.querySelectorAll('.prov-cb:checked');
+    const checkedProvinces = Array.from(checkedBoxes).map(cb => cb.value.toLowerCase().trim());
+
+    const filtered = allTrailEvents.filter(event => {
+      // 1. Zoekbalk filter
+      const titleMatch = event.title ? event.title.toLowerCase().includes(searchQuery) : false;
+      const locMatch = event.location ? event.location.toLowerCase().includes(searchQuery) : false;
+      if (searchQuery && !titleMatch && !locMatch) return false;
+
+      // 2. Provincie filter
+      const rawProv = event.province ? event.province.toLowerCase().trim() : "";
+      if (rawProv && rawProv !== "onbekend") {
+        if (!checkedProvinces.includes(rawProv)) {
+          return false;
+        }
+      }
+
+      // 3. Afstand v.a. Woonplaats filter
+      if (event.lat && event.lon) {
+        const distFromUser = calculateDistance(userLat, userLon, event.lat, event.lon);
+        event._distFromUser = distFromUser;
+        if (distFromUser && distFromUser > maxRadius) {
+          return false;
+        }
+      } else {
+        event._distFromUser = null;
+      }
+
+      // 4. Maand filter (YYYY-MM)
+      if (selectedMonth !== 'all' && (!event.date || !event.date.startsWith(selectedMonth))) {
         return false;
       }
-    }
 
-    // 3. Afstand v.a. Woonplaats filter
-    if (event.lat && event.lon) {
-      const distFromUser = calculateDistance(userLat, userLon, event.lat, event.lon);
-      event._distFromUser = distFromUser;
-      if (distFromUser && distFromUser > maxRadius) {
-        return false;
+      // 5. Trail Afstand filter
+      if (distCategory !== 'all') {
+        if (!event.distances || event.distances.length === 0) return false;
+        return event.distances.some(d => {
+          const match = d.match(/\d+/);
+          if (!match) return false;
+          const num = parseInt(match[0], 10);
+          if (distCategory === 'short') return num < 15;
+          if (distCategory === 'medium') return num >= 15 && num < 30;
+          if (distCategory === 'long') return num >= 30 && num < 50;
+          if (distCategory === 'ultra') return num >= 50;
+          return true;
+        });
       }
-    } else {
-      event._distFromUser = null;
-    }
 
-    // 4. Maand filter (YYYY-MM)
-    if (selectedMonth !== 'all' && (!event.date || !event.date.startsWith(selectedMonth))) {
-      return false;
-    }
+      return true;
+    });
 
-    // 5. Trail Afstand filter
-    if (distCategory !== 'all') {
-      if (!event.distances || event.distances.length === 0) return false;
-      return event.distances.some(d => {
-        const match = d.match(/\d+/);
-        if (!match) return false;
-        const num = parseInt(match[0], 10);
-        if (distCategory === 'short') return num < 15;
-        if (distCategory === 'medium') return num >= 15 && num < 30;
-        if (distCategory === 'long') return num >= 30 && num < 50;
-        if (distCategory === 'ultra') return num >= 50;
-        return true;
-      });
-    }
-
-    return true;
-  });
-
-  renderEvents(filtered);
+    renderEvents(filtered);
+  } catch (err) {
+    console.error("❌ [FILTER ERROR]:", err);
+  }
 }
 
 function renderEvents(events) {
@@ -195,11 +213,12 @@ function renderEvents(events) {
 
   if (events.length === 0) {
     container.innerHTML = '<p style="padding:15px; background:#fff; border:1px solid #ddd; border-radius:8px;">Geen evenementen gevonden voor de geselecteerde filters.</p>';
+    sendHeight();
     return;
   }
 
   const userCityEl = document.getElementById('userLocation');
-  const userCity = userCityEl ? userCityEl.value : 'locatie';
+  const userCity = userCityEl ? userCityEl.value : 'Utrecht';
 
   container.innerHTML = events.map(e => {
     const city = (e.city && e.city !== "Onbekend") ? e.city : (e.location ? e.location.split(',')[0].trim() : "Onbekend");
@@ -215,7 +234,7 @@ function renderEvents(events) {
 
     const fullLocationDisplay = locationParts.join(', ');
 
-    const distBadge = e._distFromUser !== null && e._distFromUser !== undefined 
+    const distBadge = (e._distFromUser !== null && e._distFromUser !== undefined) 
       ? `<span class="distance-badge">🚗 ${e._distFromUser} km v.a. ${userCity}</span>` 
       : '';
 
@@ -234,6 +253,8 @@ function renderEvents(events) {
       </div>
     `;
   }).join('');
+
+  sendHeight();
 }
 
 function populateMonthDropdown() {
@@ -250,19 +271,4 @@ function populateMonthDropdown() {
     opt.textContent = `${dutchMonthNames[m]} ${y}`;
     monthSelect.appendChild(opt);
   }
-}
-
-// Stuur de exacte hoogte van de pagina naar het parent window (WordPress)
-function sendHeight() {
-  const height = document.body.scrollHeight;
-  window.parent.postMessage({ frameHeight: height }, '*');
-}
-
-// Pas deze regel aan in je bestaande renderEvents() functie:
-// Voeg sendHeight() toe helemaal aan het einde van renderEvents():
-function renderEvents(events) {
-  // ... je bestaande render logica ...
-  
-  // Stuur de nieuwe hoogte door na het renderen van de kaartjes
-  setTimeout(sendHeight, 100);
 }
