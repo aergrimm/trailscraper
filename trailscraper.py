@@ -3,10 +3,11 @@ import json
 import re
 import sys
 import io
+import time
 import logging
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 from datetime import datetime
 
 # Dwing console output naar UTF-8 voor Windows/NppExec ondersteuning
@@ -20,6 +21,9 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(BASE_DIR, "config.json")
 OUTPUT_PATH = os.path.join(BASE_DIR, "events.json")
+
+# Cache om dubbele API calls voor dezelfde locatie te voorkomen
+GEOCODE_CACHE = {}
 
 MONTH_MAP = {
     "jan": "01", "januari": "01",
@@ -44,10 +48,8 @@ def clean_text(text):
     return cleaned.strip()
 
 def normalize_date(raw_date_str, month_str=None, year_str=None, link_url=None):
-    """Zet elke datumindeling (ISO, DD-MM-YYYY, tekst, URL) om naar YYYY-MM-DD."""
     current_year = str(datetime.now().year)
 
-    # 1. Probeer datum uit URL (bijv. '/2026-09-20')
     if link_url:
         url_match = re.search(r'(\d{4})-(\d{2})-(\d{2})', link_url)
         if url_match:
@@ -61,7 +63,6 @@ def normalize_date(raw_date_str, month_str=None, year_str=None, link_url=None):
     if not combined_text:
         return "Onbekend"
 
-    # 2. Check op cijfers: DD-MM-YYYY, DD/MM/YYYY of DD.MM.YYYY
     digits_match = re.search(r'(\d{1,2})[-/\.](\d{1,2})[-/\.](\d{2,4})', combined_text)
     if digits_match:
         day = digits_match.group(1).zfill(2)
@@ -71,7 +72,6 @@ def normalize_date(raw_date_str, month_str=None, year_str=None, link_url=None):
             year = "20" + year
         return f"{year}-{month}-{day}"
 
-    # 3. Check op tekstuele datum: '20 september 2026'
     day_match = re.search(r'\d+', combined_text)
     if not day_match:
         return "Onbekend"
@@ -91,7 +91,6 @@ def normalize_date(raw_date_str, month_str=None, year_str=None, link_url=None):
     return f"{year}-{month}-{day}"
 
 def normalize_distance(dist_str):
-    """Vertaalt afstanden en splits bereiken zoals '10-20km' op naar ['10km', '20km']."""
     if not dist_str:
         return []
 
@@ -103,14 +102,12 @@ def normalize_distance(dist_str):
     elif "marathon" in d_lower:
         results.append("42km")
 
-    # Bereik check (bijv. 10-20km of 10 tot 20 km)
     range_match = re.search(r'(\d+)\s*(?:-|t/m|tot)\s*(\d+)\s*km?', d_lower)
     if range_match:
         results.append(f"{range_match.group(1)}km")
         results.append(f"{range_match.group(2)}km")
         return results
 
-    # Alle losse getallen
     numbers = re.findall(r'\d+', d_lower)
     for num in numbers:
         results.append(f"{num}km")
@@ -118,7 +115,6 @@ def normalize_distance(dist_str):
     return list(dict.fromkeys(results))
 
 def infer_province(location_str):
-    """Leidt de Nederlandse provincie af op basis van de locatienaam."""
     if not location_str or location_str == "Onbekend":
         return "Buitenland"
     
@@ -132,6 +128,35 @@ def infer_province(location_str):
         if prov.lower() in loc_lower:
             return prov
     return "Buitenland"
+
+def geocode_location(location_name):
+    """Haalt lat/lon op via OpenStreetMap Nominatim API met caching en rate-limiting."""
+    if not location_name or location_name == "Onbekend":
+        return None, None
+
+    clean_loc = location_name.strip()
+    if clean_loc in GEOCODE_CACHE:
+        return GEOCODE_CACHE[clean_loc]
+
+    try:
+        url = f"https://nominatim.openstreetmap.org/search?format=json&q={quote(clean_loc + ', Nederland')}&limit=1"
+        headers = {'User-Agent': 'TrailKalender/1.0 (info@aergrimm.nl)'}
+        
+        response = requests.get(url, headers=headers, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            if data and len(data) > 0:
+                lat = float(data[0]['lat'])
+                lon = float(data[0]['lon'])
+                GEOCODE_CACHE[clean_loc] = (lat, lon)
+                # Respecteer de Nominatim Usage Policy (max 1 request per seconde)
+                time.sleep(1.0)
+                return lat, lon
+    except Exception as e:
+        logging.warning(f"⚠️ Geocoding mislukt voor '{clean_loc}': {e}")
+
+    GEOCODE_CACHE[clean_loc] = (None, None)
+    return None, None
 
 def parse_events_from_page(soup, selectors, current_url):
     events = []
@@ -182,10 +207,13 @@ def parse_events_from_page(soup, selectors, current_url):
             month_text = month_el.get_text(strip=True) if month_el else ""
             iso_date = normalize_date(day_text, month_str=month_text, link_url=event_link)
 
-        # 4. TEKSTEN SCHOONMAKEN EN VERZAMELEN
+        # 4. TEKSTEN SCHOONMAKEN EN LOCATIE OMSETTEN NAAR LAT/LON
         raw_loc = loc_el.get_text(strip=True) if loc_el else "Onbekend"
         clean_loc = clean_text(raw_loc)
         province = infer_province(clean_loc)
+
+        # Haal coördinaten op via OpenStreetMap
+        lat, lon = geocode_location(clean_loc)
 
         title = title_el.get_text(strip=True) if title_el else "Onbekend"
 
@@ -198,6 +226,10 @@ def parse_events_from_page(soup, selectors, current_url):
                 "distances": distances,
                 "link": event_link
             }
+            if lat is not None and lon is not None:
+                event_data["lat"] = lat
+                event_data["lon"] = lon
+
             events.append(event_data)
         
     return events
@@ -234,7 +266,7 @@ def scrape_site(site_config):
     selectors = site_config.get("selectors", {})
     all_site_events = []
     pages_processed = 0
-    max_pages = 20  # Veiligheidslimiet voor paginering
+    max_pages = 20
 
     while current_url and pages_processed < max_pages:
         pages_processed += 1
@@ -253,7 +285,6 @@ def scrape_site(site_config):
         
         logging.info(f"{len(events)} events gevonden op pagina {pages_processed}.")
 
-        # Volgende pagina zoeken
         next_url = find_next_page_url(soup, current_url, selectors)
         if next_url and next_url != current_url:
             current_url = next_url
