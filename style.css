@@ -14,14 +14,14 @@ body {
 }
 
 .trail-container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 /* Filter Bar Styling */
 .filter-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
   margin-bottom: 24px;
   background-color: #ffffff;
@@ -30,43 +30,136 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.flex-1 { flex: 1 1 180px; }
+.flex-2 { flex: 2 1 260px; }
+
 .filter-group {
-  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
 }
 
 input[type="text"],
 select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 14px;
   background-color: #f8fafc;
   color: #334155;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 input[type="text"]:focus,
 select:focus {
   border-color: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
   background-color: #ffffff;
 }
 
-/* Event Cards Grid */
-#events-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* Filter Blokken (Afstanden & Provincies) */
+.filter-block {
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
 }
 
+.filter-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #334155;
+  font-size: 13px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkbox-group label {
+  font-size: 13px;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Provincies in strakke 4 kolommen */
+.province-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px 12px;
+}
+
+.full-width-item {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+/* Wisselknop (Alles aan / Alles uit) */
+.btn-toggle {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #475569;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-toggle:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Grid voor Event Kaarten (max 3 kolommen, sluit automatisch aan) */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Event Kaart Styling */
 .trail-event-card {
   background-color: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 10px;
+  padding: 16px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -75,59 +168,58 @@ select:focus {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.trail-event-card h3 {
-  font-size: 18px;
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.card-title {
+  font-size: 16px;
   font-weight: 700;
   color: #0f172a;
-  margin-bottom: 8px;
+  line-height: 1.3;
 }
 
-.trail-event-meta {
-  font-size: 14px;
+.card-location {
+  font-size: 13px;
   color: #475569;
-  margin-bottom: 8px;
 }
 
-.trail-event-distances {
-  font-size: 14px;
+.travel-distance {
+  font-size: 12px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.card-distances {
+  font-size: 13px;
   font-weight: 600;
   color: #16a34a;
-  margin-bottom: 12px;
+  margin-top: 4px;
 }
 
 .trail-event-link {
-  display: inline-block;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #16a34a;
   text-decoration: none;
-  transition: color 0.15s ease;
+  margin-top: 2px;
 }
 
 .trail-event-link:hover {
-  color: #15803d;
   text-decoration: underline;
 }
 
-/* Meldingen */
-.no-events, .error-msg {
-  text-align: center;
-  padding: 32px 16px;
-  background: #ffffff;
-  border-radius: 12px;
-  color: #64748b;
-  border: 1px dashed #cbd5e1;
-}
-
-.error-msg {
-  color: #dc2626;
-  border-color: #fca5a5;
-  background-color: #fef2f2;
-}
-
-/* Responsive tweaks */
+/* Responsive instellingen */
 @media (max-width: 600px) {
-  .filter-group {
-    flex: 1 1 100%;
+  .province-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

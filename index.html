@@ -13,35 +13,44 @@
     <!-- Filterbalk -->
     <div class="filter-container">
       
-      <!-- Rij 1: Zoekterm, Vertrekplaats & Maand -->
+      <!-- Rij 1: Zoeken & Maand -->
       <div class="filter-row">
-        <div class="filter-group">
+        <div class="filter-group flex-2">
           <label for="search-input">Zoeken:</label>
           <input type="text" id="search-input" placeholder="Zoek op titel of locatie...">
         </div>
 
-        <div class="filter-group">
-          <label for="user-location">Afstand berekenen vanaf:</label>
-          <input type="text" id="user-location" value="Utrecht" placeholder="Bijv. Utrecht, Amsterdam...">
-        </div>
-
-        <div class="filter-group">
+        <div class="filter-group flex-1">
           <label for="month-filter">Maand:</label>
           <select id="month-filter">
             <option value="all">Alle maanden</option>
-            <!-- Wordt automatisch gevuld door app.js -->
+            <!-- Automatisch gevuld door app.js -->
           </select>
         </div>
       </div>
 
-      <!-- Rij 2: Afstand Checkboxes -->
+      <!-- Rij 2: Vertrekplaats & Max. Reisafstand -->
+      <div class="filter-row">
+        <div class="filter-group flex-2">
+          <label for="user-location">Vertrekplaats:</label>
+          <input type="text" id="user-location" value="Utrecht" placeholder="Bijv. Utrecht, Amsterdam...">
+        </div>
+
+        <div class="filter-group flex-1">
+          <label for="travel-dist-filter">Max. reisafstand:</label>
+          <select id="travel-dist-filter">
+            <option value="all">Alle afstanden</option>
+            <option value="50">&lt; 50 km</option>
+            <option value="100">&lt; 100 km</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Blok 3: Afstanden -->
       <div class="filter-block">
         <div class="filter-block-header">
           <span class="filter-label">Afstanden:</span>
-          <div class="btn-group">
-            <button type="button" id="btn-dist-select-all" class="btn-select">Alles aan</button>
-            <button type="button" id="btn-dist-deselect-all" class="btn-select">Alles uit</button>
-          </div>
+          <button type="button" id="btn-toggle-dist" class="btn-toggle">Alles uit</button>
         </div>
         <div class="checkbox-group">
           <label><input type="checkbox" class="dist-checkbox" value="under_15" checked> &lt; 15 km</label>
@@ -51,16 +60,13 @@
         </div>
       </div>
 
-      <!-- Rij 3: Provincie Checkboxes -->
+      <!-- Blok 4: Provincies (4 kolommen) -->
       <div class="filter-block">
         <div class="filter-block-header">
           <span class="filter-label">Provincies:</span>
-          <div class="btn-group">
-            <button type="button" id="btn-prov-select-all" class="btn-select">Alles aan</button>
-            <button type="button" id="btn-prov-deselect-all" class="btn-select">Alles uit</button>
-          </div>
+          <button type="button" id="btn-toggle-prov" class="btn-toggle">Alles uit</button>
         </div>
-        <div class="checkbox-group province-grid">
+        <div class="checkbox-group province-grid-4">
           <label><input type="checkbox" class="prov-checkbox" value="Drenthe" checked> Drenthe</label>
           <label><input type="checkbox" class="prov-checkbox" value="Flevoland" checked> Flevoland</label>
           <label><input type="checkbox" class="prov-checkbox" value="Friesland" checked> Friesland</label>
@@ -73,14 +79,14 @@
           <label><input type="checkbox" class="prov-checkbox" value="Utrecht" checked> Utrecht</label>
           <label><input type="checkbox" class="prov-checkbox" value="Zeeland" checked> Zeeland</label>
           <label><input type="checkbox" class="prov-checkbox" value="Zuid-Holland" checked> Zuid-Holland</label>
-          <label><input type="checkbox" class="prov-checkbox" value="Buitenland" checked> Overig / Buitenland</label>
+          <label class="full-width-item"><input type="checkbox" class="prov-checkbox" value="Buitenland" checked> Overig / Buitenland</label>
         </div>
       </div>
 
     </div>
 
-    <!-- Container voor evenementen -->
-    <div id="events-container"></div>
+    <!-- Container voor evenementen (Grid layout) -->
+    <div id="events-container" class="events-grid"></div>
 
   </div>
 
