@@ -44,14 +44,15 @@ if (document.readyState === 'loading') {
   initApp();
 }
 
+// Veilige sendHeight wat nie breek op GitHub Pages nie
 function sendHeight() {
   try {
-    const height = document.body.scrollHeight;
     if (window.parent && window.parent !== window) {
+      const height = document.body.scrollHeight;
       window.parent.postMessage({ frameHeight: height }, '*');
     }
   } catch (e) {
-    console.warn("Kon iframe hoogte niet versturen:", e);
+    // Negeer waarskuwing as postMessage nie toegelaat word nie
   }
 }
 
