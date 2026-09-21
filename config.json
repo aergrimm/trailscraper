@@ -21,7 +21,7 @@
     },
 	  {
       "name": "TrailKalenderNL",
-      "enabled": true,
+      "enabled": false,
       "url": "https://trailkalender.nl/kalender/",
       "headers": {
 		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
@@ -51,7 +51,7 @@
     },
 	  {
       "name": "BeTrailNL",
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.betrail.run/nl/calendar/nederland",
       "headers": {
 		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
