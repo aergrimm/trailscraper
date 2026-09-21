@@ -178,8 +178,9 @@ def parse_events_from_page(soup, selectors, current_url):
         day_el = get_elem("date_day")
         loc_el = get_elem("location")
         date_single_el = get_elem("date_single")
-
-        logging.info(f"🔍 Scraping Event: {current_url} {title_el} ({loc_el})")
+        
+        title = title_el.get_text(strip=True) if title_el else "Onbekend"
+        logging.info(f"🔍 Scraping Event: {title}")
 
         # 1. LINK OPHALEN
         link_selector = selectors.get("link")
@@ -217,7 +218,7 @@ def parse_events_from_page(soup, selectors, current_url):
         # Haal coördinaten op via OpenStreetMap
         lat, lon = geocode_location(clean_loc)
 
-        title = title_el.get_text(strip=True) if title_el else "Onbekend"
+
 
         if title and title != "Onbekend":
             event_data = {
