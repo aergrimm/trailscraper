@@ -179,6 +179,8 @@ def parse_events_from_page(soup, selectors, current_url):
         loc_el = get_elem("location")
         date_single_el = get_elem("date_single")
 
+        logging.info(f"🔍 Scraping Event: {current_url} {title_el} ({loc_el})")
+
         # 1. LINK OPHALEN
         link_selector = selectors.get("link")
         link_el = card.select_one(link_selector) if link_selector else card.select_one('a')
