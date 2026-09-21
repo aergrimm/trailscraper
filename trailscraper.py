@@ -150,7 +150,7 @@ def geocode_location(location_name):
                 lon = float(data[0]['lon'])
                 GEOCODE_CACHE[clean_loc] = (lat, lon)
                 # Respecteer de Nominatim Usage Policy (max 1 request per seconde)
-                time.sleep(1.0)
+                time.sleep(2.0)
                 return lat, lon
     except Exception as e:
         logging.warning(f"⚠️ Geocoding mislukt voor '{clean_loc}': {e}")
