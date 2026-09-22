@@ -359,8 +359,8 @@
       "42km"
     ],
     "link": "https://gotrail.run/nl/event/wilhelminaberg-trappen-marathon",
-    "lat": 50.9080845,
-    "lon": 6.0264604
+    "lat": 50.9024566,
+    "lon": 6.0293103
   },
   {
     "title": "Brekeld Runners Trail",
@@ -1044,8 +1044,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/avw-crosscircuit/2026-10-25",
-    "lat": 51.9219917,
-    "lon": 4.2541194
+    "lat": 51.9266671,
+    "lon": 4.2440007
   },
   {
     "title": "Jan de Vos Najaarscross",
@@ -1491,8 +1491,8 @@
     "province": "Zuid-Holland",
     "distances": [],
     "link": "https://gotrail.run/nl/event/av-passaat-cross",
-    "lat": 51.8348695,
-    "lon": 4.6937293
+    "lat": 51.834667,
+    "lon": 4.7046883
   },
   {
     "title": "Dom Verdan Trail",
@@ -1826,8 +1826,8 @@
       "15km"
     ],
     "link": "https://gotrail.run/nl/event/beachrun-zandvoort",
-    "lat": 52.3719838,
-    "lon": 4.5302209
+    "lat": 52.3595223,
+    "lon": 4.5350259
   },
   {
     "title": "Trailrun Weert",
@@ -1856,8 +1856,8 @@
       "16km"
     ],
     "link": "https://gotrail.run/nl/event/technische-unie-bommelasloop/2026-11-15",
-    "lat": 52.2233633,
-    "lon": 6.8705957
+    "lat": 52.2209855,
+    "lon": 6.8940537
   },
   {
     "title": "Turfveld Wintercross",
@@ -1884,8 +1884,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/avw-crosscircuit/2026-11-15",
-    "lat": 51.9219917,
-    "lon": 4.2541194
+    "lat": 51.9266671,
+    "lon": 4.2440007
   },
   {
     "title": "Loetcross",
@@ -2290,8 +2290,8 @@
       "11km"
     ],
     "link": "https://gotrail.run/nl/event/urban-trail-eindhoven",
-    "lat": 51.4485569,
-    "lon": 5.4501225
+    "lat": 51.4392648,
+    "lon": 5.478633
   },
   {
     "title": "Oriëntatieloop Soest",
@@ -2381,8 +2381,8 @@
     "province": "Flevoland",
     "distances": [],
     "link": "https://gotrail.run/nl/event/sea-fresh-wintercross-urk/2026-12-05",
-    "lat": 52.6927959,
-    "lon": 5.4576171
+    "lat": 52.6654515,
+    "lon": 5.5987894
   },
   {
     "title": "Brabantse Kluis Trail",
@@ -2423,8 +2423,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/tartaros-campus-challenge",
-    "lat": 52.2233633,
-    "lon": 6.8705957
+    "lat": 52.2209855,
+    "lon": 6.8940537
   },
   {
     "title": "Crosscircuit Duincross",
@@ -2494,8 +2494,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/avw-crosscircuit/2026-12-06",
-    "lat": 51.9219917,
-    "lon": 4.2541194
+    "lat": 51.9266671,
+    "lon": 4.2440007
   },
   {
     "title": "Sjef van Ooyen Kapellerbosloop",
@@ -2504,8 +2504,8 @@
     "province": "Limburg",
     "distances": [],
     "link": "https://gotrail.run/nl/event/sjef-van-ooyen-kapellerbosloop",
-    "lat": 50.9080845,
-    "lon": 6.0264604
+    "lat": 50.9024566,
+    "lon": 6.0293103
   },
   {
     "title": "Santa's Crash Course",
@@ -2699,8 +2699,8 @@
       "8km"
     ],
     "link": "https://gotrail.run/nl/event/urbancityrun053",
-    "lat": 52.2233633,
-    "lon": 6.8705957
+    "lat": 52.2209855,
+    "lon": 6.8940537
   },
   {
     "title": "Drouwenerzand Cross Gasselte",
@@ -3256,8 +3256,8 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/rutbeekcross",
-    "lat": 52.2233633,
-    "lon": 6.8705957
+    "lat": 52.2209855,
+    "lon": 6.8940537
   },
   {
     "title": "Bosmarathon en Minder",
@@ -3696,8 +3696,8 @@
       "8km"
     ],
     "link": "https://gotrail.run/nl/event/diemercross",
-    "lat": 52.3350493,
-    "lon": 4.9842843
+    "lat": 52.3421489,
+    "lon": 4.960825
   },
   {
     "title": "Braambergencross",
