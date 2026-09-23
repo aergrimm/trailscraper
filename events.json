@@ -1372,8 +1372,8 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/night-trail-zwolle",
-    "lat": 52.5089759,
-    "lon": 6.0943765
+    "lat": 52.5145653,
+    "lon": 6.0977204
   },
   {
     "title": "Devil's Trail - Schiermonnikoog",
@@ -1491,8 +1491,8 @@
     "province": "Zuid-Holland",
     "distances": [],
     "link": "https://gotrail.run/nl/event/av-passaat-cross",
-    "lat": 51.834667,
-    "lon": 4.7046883
+    "lat": 51.8348695,
+    "lon": 4.6937293
   },
   {
     "title": "Dom Verdan Trail",
@@ -1516,8 +1516,8 @@
       "20km"
     ],
     "link": "https://gotrail.run/nl/event/haagse-duinentrail",
-    "lat": 52.0799838,
-    "lon": 4.3113461
+    "lat": 52.0749456,
+    "lon": 4.2696802
   },
   {
     "title": "Beekse Herfstrun",
@@ -1541,8 +1541,8 @@
       "11km"
     ],
     "link": "https://gotrail.run/nl/event/urban-trail-haarlem",
-    "lat": 52.3885317,
-    "lon": 4.6388048
+    "lat": 52.3837281,
+    "lon": 4.6435679
   },
   {
     "title": "Last Runners Standing - Langenboom",
@@ -1708,8 +1708,8 @@
       "6km"
     ],
     "link": "https://gotrail.run/nl/event/natte-neuzen-trail-rosendael",
-    "lat": 52.0394752,
-    "lon": 5.963025
+    "lat": 52.0030774,
+    "lon": 5.9601408
   },
   {
     "title": "Docfacross",
@@ -1826,8 +1826,8 @@
       "15km"
     ],
     "link": "https://gotrail.run/nl/event/beachrun-zandvoort",
-    "lat": 52.3595223,
-    "lon": 4.5350259
+    "lat": 52.3719838,
+    "lon": 4.5302209
   },
   {
     "title": "Trailrun Weert",
@@ -1856,8 +1856,8 @@
       "16km"
     ],
     "link": "https://gotrail.run/nl/event/technische-unie-bommelasloop/2026-11-15",
-    "lat": 52.2209855,
-    "lon": 6.8940537
+    "lat": 52.2233633,
+    "lon": 6.8705957
   },
   {
     "title": "Turfveld Wintercross",
@@ -1938,8 +1938,8 @@
       "15km"
     ],
     "link": "https://gotrail.run/nl/event/night-trail-run-utrecht",
-    "lat": 52.0367152,
-    "lon": 5.0836117
+    "lat": 52.0298704,
+    "lon": 5.0929334
   },
   {
     "title": "Hollands Duin Trail",
@@ -2214,8 +2214,8 @@
       "25km"
     ],
     "link": "https://gotrail.run/nl/event/meijendelloop",
-    "lat": 52.0799838,
-    "lon": 4.3113461
+    "lat": 52.0749456,
+    "lon": 4.2696802
   },
   {
     "title": "Backyard Ultra Rotterdam",
@@ -2423,8 +2423,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/tartaros-campus-challenge",
-    "lat": 52.2209855,
-    "lon": 6.8940537
+    "lat": 52.2233633,
+    "lon": 6.8705957
   },
   {
     "title": "Crosscircuit Duincross",
@@ -2699,8 +2699,8 @@
       "8km"
     ],
     "link": "https://gotrail.run/nl/event/urbancityrun053",
-    "lat": 52.2209855,
-    "lon": 6.8940537
+    "lat": 52.2233633,
+    "lon": 6.8705957
   },
   {
     "title": "Drouwenerzand Cross Gasselte",
@@ -3024,8 +3024,8 @@
     "province": "Noord-Holland",
     "distances": [],
     "link": "https://gotrail.run/nl/event/boscross-amsterdam",
-    "lat": 52.2862177,
-    "lon": 4.8526493
+    "lat": 52.3028209,
+    "lon": 4.8596844
   },
   {
     "title": "Midwintercross Heeten",
@@ -3165,6 +3165,19 @@
     "lon": 5.5447825
   },
   {
+    "title": "Witte Ruijsheuvelcross",
+    "date": "2026-01-10",
+    "location": "Macharen, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "5km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/witte-ruijsheuvelcross",
+    "lat": 51.804411,
+    "lon": 5.5447825
+  },
+  {
     "title": "Enclavecross Baarle-Nassau",
     "date": "2026-01-10",
     "location": "Baarle-Nassau, Noord-Brabant",
@@ -3256,8 +3269,8 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/rutbeekcross",
-    "lat": 52.2209855,
-    "lon": 6.8940537
+    "lat": 52.2233633,
+    "lon": 6.8705957
   },
   {
     "title": "Bosmarathon en Minder",
@@ -3372,8 +3385,8 @@
       "14km"
     ],
     "link": "https://gotrail.run/nl/event/beachrun-scheveningen",
-    "lat": 52.0799838,
-    "lon": 4.3113461
+    "lat": 52.0749456,
+    "lon": 4.2696802
   },
   {
     "title": "Crossloop Luttenberg",
@@ -3410,9 +3423,9 @@
     "distances": [
       "20km",
       "50km",
-      "10km",
-      "18km",
-      "32km"
+      "11km",
+      "17km",
+      "60km"
     ],
     "link": "https://gotrail.run/nl/event/drielandenpunt-trail-trail-des-trois-bornes",
     "lat": 50.7781016,
@@ -3696,8 +3709,8 @@
       "8km"
     ],
     "link": "https://gotrail.run/nl/event/diemercross",
-    "lat": 52.3421489,
-    "lon": 4.960825
+    "lat": 52.3350493,
+    "lon": 4.9842843
   },
   {
     "title": "Braambergencross",
@@ -4527,8 +4540,8 @@
     "province": "Overijssel",
     "distances": [],
     "link": "https://gotrail.run/nl/event/oo-run-zwolle-stadshagen",
-    "lat": 52.5089759,
-    "lon": 6.0943765
+    "lat": 52.5145653,
+    "lon": 6.0977204
   },
   {
     "title": "Grenslaup Vosseven",
@@ -4751,20 +4764,6 @@
     "link": "https://gotrail.run/nl/event/turfveld-zomercross/2027-08-15",
     "lat": 53.055232,
     "lon": 4.7967379
-  },
-  {
-    "title": "Austerlitz Trail",
-    "date": "2027-08-21",
-    "location": "Zeist, Utrecht",
-    "province": "Utrecht",
-    "distances": [
-      "21km",
-      "10km",
-      "30km"
-    ],
-    "link": "https://gotrail.run/nl/event/austerlitz-trail/2027-08-21",
-    "lat": 52.0892832,
-    "lon": 5.2276307
   },
   {
     "title": "Pink Ribbon Soester Wandelweekend",
@@ -5009,6 +5008,33 @@
     "link": "https://gotrail.run/nl/event/grenslaup-vosseven/2027-10-17",
     "lat": 51.1932084,
     "lon": 5.7235287
+  },
+  {
+    "title": "Lage Vuursche Ultra",
+    "date": "2026-10-23",
+    "location": "Lage Vuursche, Utrecht",
+    "province": "Utrecht",
+    "distances": [
+      "50km"
+    ],
+    "link": "https://gotrail.run/nl/event/lage-vuursche-ultra",
+    "lat": 52.1793308,
+    "lon": 5.2224661
+  },
+  {
+    "title": "Lage Vuursche Trail",
+    "date": "2027-11-13",
+    "location": "Lage Vuursche, Utrecht",
+    "province": "Utrecht",
+    "distances": [
+      "21km",
+      "10km",
+      "20km",
+      "30km"
+    ],
+    "link": "https://gotrail.run/nl/event/lage-vuursche-trail/2027-11-13",
+    "lat": 52.1793308,
+    "lon": 5.2224661
   },
   {
     "title": "Lage Vuursche Ultra",
