@@ -11,6 +11,7 @@
         "event_card": ".event-card-main",
         "title": ".event-card-title",
 		"date_single": "",
+		"month_header": ".race-month-header",
         "date_month": ".event-calendar div:nth-child(1)",
         "date_day": ".event-calendar div:nth-child(2)",
         "distances": ".event-card-distances, .label-distance",
@@ -40,6 +41,7 @@
       "selectors": {
         "event_card": ".tk-card",
         "title": ".tk-title",
+		"month_header": "",
         "date_single": ".tk-meta > div:first-child",
 		"date_month": "",
         "date_day": "",
@@ -71,6 +73,7 @@
         "event_card": ".calendar-event",
         "title": ".eventName",
 		"date_single": "",
+		"month_header": "",
         "date_month": ".eventDates .month",
         "date_day": ".eventDates .day",
         "location": ".place-name",

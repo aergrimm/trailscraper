@@ -161,14 +161,44 @@ def geocode_location(location_name):
 def parse_events_from_page(soup, selectors, current_url):
     events = []
     card_selector = selectors.get("event_card")
+    month_header_selector = selectors.get("month_header")
     
     if not card_selector:
         logging.error("❌ 'event_card' selector is leeg!")
         return events
 
-    card_elements = soup.select(card_selector)
+    # Combined CSS selector
+    combined_selector = card_selector
+    if month_header_selector:
+        combined_selector = f"{month_header_selector}, {card_selector}"
+
+    elements = soup.select(combined_selector)
     
-    for card in card_elements:
+    current_context_month = None
+    current_context_year = None
+
+    for elem in elements:
+        # Check of elem overeenkomt met de month_header
+        is_header = False
+        if month_header_selector:
+            # Controleer class-match of selector-match
+            clean_class = month_header_selector.replace('.', '').strip()
+            if clean_class in elem.get('class', []):
+                is_header = True
+
+        if is_header:
+            header_text = elem.get_text(strip=True)  # Bijv. "September 2026"
+            parts = header_text.split()
+            if len(parts) >= 2:
+                current_context_month = parts[0]
+                current_context_year = parts[1]
+            elif len(parts) == 1:
+                current_context_year = parts[0]
+            continue
+
+        # Als het een event card is:
+        card = elem
+
         def get_elem(key):
             sel = selectors.get(key)
             return card.select_one(sel) if sel else None
@@ -182,7 +212,7 @@ def parse_events_from_page(soup, selectors, current_url):
         title = title_el.get_text(strip=True) if title_el else "Onbekend"
         logging.info(f"🔍 Scraping Event: {title}")
 
-        # 1. LINK OPHALEN
+        # Link ophalen
         link_selector = selectors.get("link")
         link_el = card.select_one(link_selector) if link_selector else card.select_one('a')
         
@@ -192,7 +222,7 @@ def parse_events_from_page(soup, selectors, current_url):
         raw_href = link_el['href'] if (link_el and link_el.has_attr('href')) else ""
         event_link = urljoin(current_url, raw_href) if raw_href else "Onbekend"
 
-        # 2. AFSTANDEN OPHALEN
+        # Afstanden ophalen
         dist_selector = selectors.get("distances")
         dist_els = card.select(dist_selector) if dist_selector else []
         distances = []
@@ -201,25 +231,33 @@ def parse_events_from_page(soup, selectors, current_url):
             distances.extend(normalize_distance(raw_text))
         distances = list(dict.fromkeys(distances))
 
-        # 3. DATUM BEPALEN
+        # Datum bepalen met context fallbacks
         if date_single_el:
             raw_date = date_single_el.get_text(strip=True)
-            iso_date = normalize_date(raw_date, link_url=event_link)
+            iso_date = normalize_date(
+                raw_date, 
+                month_str=current_context_month, 
+                year_str=current_context_year, 
+                link_url=event_link
+            )
         else:
             day_text = day_el.get_text(strip=True) if day_el else ""
-            month_text = month_el.get_text(strip=True) if month_el else ""
-            iso_date = normalize_date(day_text, month_str=month_text, link_url=event_link)
+            month_text = month_el.get_text(strip=True) if month_el else current_context_month
+            iso_date = normalize_date(
+                day_text, 
+                month_str=month_text, 
+                year_str=current_context_year, 
+                link_url=event_link
+            )
 
-        # 4. TEKSTEN SCHOONMAKEN EN LOCATIE OMSETTEN NAAR LAT/LON
+        # Teksten schoonmaken en locatie omzetten naar lat/lon
         raw_loc = loc_el.get_text(strip=True) if loc_el else "Onbekend"
         clean_loc = clean_text(raw_loc)
         province = infer_province(clean_loc)
 
         # Haal coördinaten op via OpenStreetMap
         lat, lon = geocode_location(clean_loc)
-
-
-
+        logging.info(f"🔍 Event Date: {iso_date}")
         if title and title != "Onbekend":
             event_data = {
                 "title": title,

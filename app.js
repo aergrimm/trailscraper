@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 6. EENMALIG REISAFSTANDEN BEREKENEN (0.001 sec via JSON lat/lon)
+  // 6. REISAFSTANDEN BEREKENEN EN SORTEREN OP DATUM
   async function updateCalculatedDistances() {
     const userCity = userLocationInput ? userLocationInput.value.trim() : 'Utrecht';
     const userCoords = await geocodeUserCity(userCity || 'Utrecht');
@@ -123,10 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Sorteren op datum (oplopend)
+    allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+
     filterEvents();
   }
 
-  // 7. EVENTS RENDEREN
+  // 7. EVENTS RENDEREN MET MAAND-SCHEIDINGSBALK
   function renderEvents(events) {
     if (!eventsContainer) return;
 
@@ -137,8 +140,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const userCity = userLocationInput ? userLocationInput.value.trim() : 'Utrecht';
+    const dutchMonths = [
+      "Januari", "Februari", "Maart", "April", "Mei", "Juni",
+      "Juli", "Augustus", "September", "Oktober", "November", "December"
+    ];
 
-    const cardsHtml = events.map(e => {
+    let htmlBuilder = '';
+    let currentMonthHeader = '';
+
+    events.forEach(e => {
+      // Bepaal maand en jaar voor de scheidingsbalk
+      if (e.date && e.date !== "Onbekend") {
+        const parts = e.date.split('-');
+        if (parts.length === 3) {
+          const year = parts[0];
+          const monthIdx = parseInt(parts[1], 10) - 1;
+          const monthYearStr = `${dutchMonths[monthIdx]} ${year}`;
+
+          if (monthYearStr !== currentMonthHeader) {
+            currentMonthHeader = monthYearStr;
+            htmlBuilder += `
+              <div class="month-divider">
+                <h2>${currentMonthHeader}</h2>
+              </div>
+            `;
+          }
+        }
+      }
+
       const humanReadableDate = formatDutchDate(e.date);
       const distText = e.distances && e.distances.length > 0 
         ? e.distances.join(', ') 
@@ -152,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<a class="trail-event-link" href="${e.link}" target="_blank" rel="noopener">Bekijk &rarr;</a>`
         : '';
 
-      return `
+      htmlBuilder += `
         <div class="trail-event-card">
           <div class="card-header">
             <span class="card-date">📅 ${humanReadableDate}</span>
@@ -169,11 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 
-    eventsContainer.innerHTML = cardsHtml.join('');
+    eventsContainer.innerHTML = htmlBuilder;
     sendHeightToParent();
   }
 
-  // 8. FILTEREN (100% Synchroon & Instant)
+  // 8. FILTEREN EN SORTEREN
   function filterEvents() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedMonth = monthFilter ? monthFilter.value : 'all';
@@ -224,6 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       return matchesSearch && matchesMonth && matchesProvince && matchesDistance && matchesTravelDistance;
     });
+
+    // Zorg ervoor dat het resultaat altijd op datum gesorteerd is
+    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     renderEvents(filtered);
   }
