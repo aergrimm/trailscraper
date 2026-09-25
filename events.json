@@ -362,8 +362,8 @@
       "42km"
     ],
     "link": "https://gotrail.run/nl/event/wilhelminaberg-trappen-marathon",
-    "lat": 50.9080845,
-    "lon": 6.0264604
+    "lat": 50.9024566,
+    "lon": 6.0293103
   },
   {
     "title": "Brekeld Runners Trail",
@@ -511,6 +511,16 @@
     "lon": 6.3931283
   },
   {
+    "title": "Mergelwandeling Sibbe",
+    "date": "2026-10-04",
+    "location": "Sibbe-IJzeren, Limburg",
+    "province": "Limburg",
+    "distances": [],
+    "link": "https://gotrail.run/nl/event/mergelwandeling-sibbe",
+    "lat": 50.8418761,
+    "lon": 5.8276871
+  },
+  {
     "title": "Running Junkies Trailrun",
     "date": "2026-10-04",
     "location": "Meerse Plas, Noord-Brabant",
@@ -604,8 +614,8 @@
       "16km"
     ],
     "link": "https://gotrail.run/nl/event/dordtse-biesbosch-trailrun",
-    "lat": 51.7689546,
-    "lon": 4.6867891
+    "lat": 51.814429,
+    "lon": 4.6692438
   },
   {
     "title": "AVW 3Bossentrail",
@@ -773,19 +783,6 @@
     "link": "https://gotrail.run/nl/event/dutch-backyard-ultra",
     "lat": 52.3451194,
     "lon": 5.4580775
-  },
-  {
-    "title": "A. Vogelloop",
-    "date": "2026-10-17",
-    "location": "t Harde, Gelderland",
-    "province": "Gelderland",
-    "distances": [
-      "5km",
-      "10km"
-    ],
-    "link": "https://gotrail.run/nl/event/a-vogelloop",
-    "lat": 52.4091474,
-    "lon": 5.8930152
   },
   {
     "title": "A. Vogelloop",
@@ -1053,6 +1050,20 @@
     "lon": 5.618933
   },
   {
+    "title": "Vlagheideberg-Trailrun",
+    "date": "2026-10-25",
+    "location": "Eerde, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "5km",
+      "8km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/vlagheideberg-trailrun",
+    "lat": 51.6034376,
+    "lon": 5.4980051
+  },
+  {
     "title": "AVW Crosscircuit",
     "date": "2026-10-25",
     "location": "Maassluis, Zuid-Holland",
@@ -1315,16 +1326,6 @@
     "lon": 6.2548363
   },
   {
-    "title": "Bergh op Pad",
-    "date": "2026-11-01",
-    "location": "s-Heerenberg, Gelderland",
-    "province": "Gelderland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/bergh-op-pad",
-    "lat": 51.8779448,
-    "lon": 6.2548363
-  },
-  {
     "title": "Heidetrail Oirschot",
     "date": "2026-11-01",
     "location": "Oirschot, Noord-Brabant",
@@ -1349,8 +1350,8 @@
       "17km"
     ],
     "link": "https://gotrail.run/nl/event/warnsborncross",
-    "lat": 51.984257,
-    "lon": 5.9108573
+    "lat": 52.0056642,
+    "lon": 5.8762345
   },
   {
     "title": "Last Pirate Running",
@@ -1386,8 +1387,8 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/night-trail-zwolle",
-    "lat": 52.5145653,
-    "lon": 6.0977204
+    "lat": 52.5089759,
+    "lon": 6.0943765
   },
   {
     "title": "Devil's Trail - Schiermonnikoog",
@@ -1401,8 +1402,8 @@
       "30km"
     ],
     "link": "https://gotrail.run/nl/event/devils-trail-schiermonnikoog",
-    "lat": 53.4782844,
-    "lon": 6.1610076
+    "lat": 53.4787891,
+    "lon": 6.2037718
   },
   {
     "title": "Lage Vuursche Trail",
@@ -1701,23 +1702,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/lumiereparkcross-almere",
-    "lat": 52.4417588,
-    "lon": 5.2093149
-  },
-  {
-    "title": "Dieprijtcross",
-    "date": "2026-11-08",
-    "location": "Eersel, Noord-Brabant",
-    "province": "Noord-Brabant",
-    "distances": [
-      "3km",
-      "5km",
-      "7km",
-      "9km"
-    ],
-    "link": "https://gotrail.run/nl/event/dieprijtcross",
-    "lat": 51.3933291,
-    "lon": 5.3413526
+    "lat": 52.3705038,
+    "lon": 5.2185859
   },
   {
     "title": "Dieprijtcross",
@@ -1745,8 +1731,8 @@
       "11km"
     ],
     "link": "https://gotrail.run/nl/event/avh-cross",
-    "lat": 52.1564581,
-    "lon": 6.740239
+    "lat": 52.1621208,
+    "lon": 6.7753538
   },
   {
     "title": "Scopias Klein Zwitserlandcross",
@@ -1847,6 +1833,20 @@
     "link": "https://gotrail.run/nl/event/alfa-bear-trail",
     "lat": 50.9425257,
     "lon": 5.8861938
+  },
+  {
+    "title": "Let's Go Running - Berg En Beekdal Trail",
+    "date": "2026-11-15",
+    "location": "Renkum, Gelderland",
+    "province": "Gelderland",
+    "distances": [
+      "16km",
+      "18km",
+      "34km"
+    ],
+    "link": "https://gotrail.run/nl/event/lets-go-running-berg-en-beekdal-trail",
+    "lat": 51.991685,
+    "lon": 5.7916923
   },
   {
     "title": "Sytze Wetting Trail Leeuwarden",
@@ -1983,8 +1983,8 @@
       "15km"
     ],
     "link": "https://gotrail.run/nl/event/night-trail-run-utrecht",
-    "lat": 52.0298704,
-    "lon": 5.0929334
+    "lat": 52.0367152,
+    "lon": 5.0836117
   },
   {
     "title": "Hollands Duin Trail",
@@ -2102,19 +2102,6 @@
     "link": "https://gotrail.run/nl/event/last-man-standing-lingezegen-run",
     "lat": 51.9187914,
     "lon": 5.8452555
-  },
-  {
-    "title": "Sperwerstrail",
-    "date": "2026-11-22",
-    "location": "Exloo, Drenthe",
-    "province": "Drenthe",
-    "distances": [
-      "7km",
-      "14km"
-    ],
-    "link": "https://gotrail.run/nl/event/sperwers-trailrun",
-    "lat": 52.882455,
-    "lon": 6.8643091
   },
   {
     "title": "Sperwerstrail",
@@ -2583,29 +2570,14 @@
     "lon": 5.303116
   },
   {
-    "title": "Engelermeercross",
-    "date": "2026-12-06",
-    "location": "s-Hertogenbosch, Noord-Brabant",
-    "province": "Noord-Brabant",
-    "distances": [
-      "3km",
-      "4km",
-      "6km",
-      "9km"
-    ],
-    "link": "https://gotrail.run/nl/event/engelermeercross",
-    "lat": 51.6889387,
-    "lon": 5.303116
-  },
-  {
     "title": "Sjef van Ooyen Kapellerbosloop",
     "date": "2026-12-07",
     "location": "Landgraaf, Limburg",
     "province": "Limburg",
     "distances": [],
     "link": "https://gotrail.run/nl/event/sjef-van-ooyen-kapellerbosloop",
-    "lat": 50.9080845,
-    "lon": 6.0264604
+    "lat": 50.9024566,
+    "lon": 6.0293103
   },
   {
     "title": "Santa's Crash Course",
@@ -2836,8 +2808,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/vaartsluisboscross",
-    "lat": 52.4417588,
-    "lon": 5.2093149
+    "lat": 52.3705038,
+    "lon": 5.2185859
   },
   {
     "title": "St Georgecross",
@@ -3030,8 +3002,8 @@
       "3km"
     ],
     "link": "https://gotrail.run/nl/event/oliebollenloop-souburg",
-    "lat": 51.865799,
-    "lon": 4.6653953
+    "lat": 51.8599524,
+    "lon": 4.6662023
   },
   {
     "title": "Plus Oudejaars Crossloop Vorden",
@@ -3410,8 +3382,8 @@
       "9km"
     ],
     "link": "https://gotrail.run/nl/event/almeerderstrandcross",
-    "lat": 52.4417588,
-    "lon": 5.2093149
+    "lat": 52.3705038,
+    "lon": 5.2185859
   },
   {
     "title": "Atledo Cross",
@@ -3818,8 +3790,8 @@
     "province": "Flevoland",
     "distances": [],
     "link": "https://gotrail.run/nl/event/braambergencross",
-    "lat": 52.4417588,
-    "lon": 5.2093149
+    "lat": 52.3705038,
+    "lon": 5.2185859
   },
   {
     "title": "Turfveld Wintercross",
@@ -4280,6 +4252,21 @@
     "lon": 5.4781463
   },
   {
+    "title": "Strong Viking - Obstacle Run Wijchen",
+    "date": "2027-04-10",
+    "location": "Wijchen, Gelderland",
+    "province": "Gelderland",
+    "distances": [
+      "42km",
+      "4km",
+      "7km",
+      "19km"
+    ],
+    "link": "https://gotrail.run/nl/event/obstacle-run-wijchen",
+    "lat": 51.8202529,
+    "lon": 5.6960903
+  },
+  {
     "title": "Beekse Trailrun Montferland",
     "date": "2027-04-11",
     "location": "Beek Gem Montferland, Gelderland",
@@ -4539,26 +4526,6 @@
     "lon": 6.2269387
   },
   {
-    "title": "Obstakel Run Bootcamp",
-    "date": "2027-06-05",
-    "location": "Eefde, Gelderland",
-    "province": "Gelderland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/obstakel-run-bootcamp",
-    "lat": 52.1709839,
-    "lon": 6.2269387
-  },
-  {
-    "title": "Obstakel Run Bootcamp",
-    "date": "2026-06-05",
-    "location": "Eefde, Gelderland",
-    "province": "Gelderland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/obstakel-run-bootcamp",
-    "lat": 52.1709839,
-    "lon": 6.2269387
-  },
-  {
     "title": "MÕSA Challenge",
     "date": "2027-06-06",
     "location": "Broekhuizen, Limburg",
@@ -4657,8 +4624,8 @@
     "province": "Overijssel",
     "distances": [],
     "link": "https://gotrail.run/nl/event/oo-run-zwolle-stadshagen",
-    "lat": 52.5145653,
-    "lon": 6.0977204
+    "lat": 52.5089759,
+    "lon": 6.0943765
   },
   {
     "title": "Grenslaup Vosseven",
