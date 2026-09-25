@@ -1,28 +1,29 @@
 /* Basis Resets & Typografie */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+
+{
+box-sizing: border-box;
+margin: 0;
+padding: 0;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f8fafc;
-  color: #1e293b;
-  padding: 16px;
-  line-height: 1.5;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background-color: #f8fafc;
+color: #1e293b;
+padding: 16px;
+line-height: 1.5;
 }
 
 .trail-container {
-  max-width: 1000px;
-  margin: 0 auto;
+max-width: 1000px;
+margin: 0 auto;
 }
 
-/* Filter Bar Styling */
+/* Filter Bar Styling & Layout */
 .filter-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 24px;
   background-color: #ffffff;
   padding: 16px;
@@ -30,19 +31,21 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.filter-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+/* Dwing elke rij in een strak grid van 2 kolommen */
+.filter-container .filter-row {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr !important; /* Links 66%, Rechts 33% */
+  gap: 20px !important;                      /* Vaste tussenruimte van 20px */
+  align-items: end !important;
+  width: 100% !important;
 }
-
-.flex-1 { flex: 1 1 180px; }
-.flex-2 { flex: 2 1 260px; }
 
 .filter-group {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100% !important;
+  min-width: 0 !important; /* Voorkomt dat het invoerveld uit zijn kolom drukt */
 }
 
 .filter-group label {
@@ -51,9 +54,13 @@ body {
   color: #475569;
 }
 
-input[type="text"],
-select {
-  width: 100%;
+/* Voorkom dat de inputs hun eigen breedte afdwingen */
+.filter-group input[type="text"],
+.filter-group select {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
   padding: 8px 12px;
   border: 1px solid #cbd5e1;
   border-radius: 6px;
@@ -61,165 +68,195 @@ select {
   background-color: #f8fafc;
   color: #334155;
   outline: none;
-  transition: border-color 0.2s ease;
 }
 
-input[type="text"]:focus,
-select:focus {
-  border-color: #16a34a;
-  background-color: #ffffff;
+/* Op kleine schermen netjes onder elkaar */
+@media (max-width: 650px) {
+  .filter-container .filter-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
 }
 
 /* Filter Blokken (Afstanden & Provincies) */
 .filter-block {
-  padding-top: 8px;
-  border-top: 1px solid #f1f5f9;
+padding-top: 8px;
+border-top: 1px solid #f1f5f9;
 }
 
 .filter-block-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 6px;
 }
 
 .filter-label {
-  font-weight: 600;
-  color: #334155;
-  font-size: 13px;
+font-weight: 600;
+color: #334155;
+font-size: 13px;
 }
 
 .checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
 }
 
 .checkbox-group label {
-  font-size: 13px;
-  color: #475569;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+font-size: 13px;
+color: #475569;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 4px;
 }
 
 /* Provincies in strakke 4 kolommen */
 .province-grid-4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px 12px;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 6px 12px;
 }
 
 .full-width-item {
-  grid-column: 1 / -1;
-  margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px dashed #e2e8f0;
+grid-column: 1 / -1;
+margin-top: 4px;
+padding-top: 4px;
+border-top: 1px dashed #e2e8f0;
 }
 
 /* Wisselknop (Alles aan / Alles uit) */
 .btn-toggle {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  color: #475569;
-  transition: background 0.15s ease, color 0.15s ease;
+background: #f1f5f9;
+border: 1px solid #cbd5e1;
+border-radius: 4px;
+padding: 3px 8px;
+font-size: 11px;
+font-weight: 600;
+cursor: pointer;
+color: #475569;
+transition: background 0.15s ease, color 0.15s ease;
 }
 
 .btn-toggle:hover {
-  background: #e2e8f0;
-  color: #0f172a;
+background: #e2e8f0;
+color: #0f172a;
 }
 
 /* Grid voor Event Kaarten (max 3 kolommen, sluit automatisch aan) */
 .events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  align-items: start;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 16px;
+align-items: start;
 }
 
 @media (min-width: 900px) {
-  .events-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.events-grid {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+
+/* Maand Scheidingsbalk (Volledige breedte over alle grid kolommen) */
+.month-divider {
+grid-column: 1 / -1;
+margin-top: 24px;
+margin-bottom: 8px;
+padding-bottom: 6px;
+border-bottom: 2px solid #16a34a;
+}
+
+.month-divider h2 {
+font-size: 18px;
+font-weight: 700;
+color: #16a34a;
+}
+
+.month-divider:first-child {
+margin-top: 8px;
 }
 
 /* Event Kaart Styling */
 .trail-event-card {
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+background-color: #ffffff;
+border-radius: 10px;
+padding: 16px;
+border: 1px solid #e2e8f0;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+display: flex;
+flex-direction: column;
+gap: 8px;
+transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .trail-event-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .card-header {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+display: flex;
+flex-direction: column;
+gap: 2px;
 }
 
 .card-date {
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
+font-size: 12px;
+font-weight: 600;
+color: #64748b;
 }
 
 .card-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1.3;
+font-size: 16px;
+font-weight: 700;
+color: #0f172a;
+line-height: 1.3;
 }
 
 .card-location {
-  font-size: 13px;
-  color: #475569;
+font-size: 13px;
+color: #475569;
 }
 
 .travel-distance {
-  font-size: 12px;
-  color: #64748b;
-  font-style: italic;
+font-size: 12px;
+color: #64748b;
+font-style: italic;
 }
 
 .card-distances {
-  font-size: 13px;
-  font-weight: 600;
-  color: #16a34a;
-  margin-top: 4px;
+font-size: 13px;
+font-weight: 600;
+color: #16a34a;
+margin-top: 4px;
 }
 
 .trail-event-link {
-  font-size: 13px;
-  font-weight: 600;
-  color: #16a34a;
-  text-decoration: none;
-  margin-top: 2px;
+font-size: 13px;
+font-weight: 600;
+color: #16a34a;
+text-decoration: none;
+margin-top: 2px;
 }
 
 .trail-event-link:hover {
-  text-decoration: underline;
+text-decoration: underline;
+}
+
+.no-events {
+grid-column: 1 / -1;
+text-align: center;
+padding: 32px;
+background: #ffffff;
+border-radius: 8px;
+border: 1px solid #e2e8f0;
+color: #64748b;
 }
 
 /* Responsive instellingen */
 @media (max-width: 600px) {
-  .province-grid-4 {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.province-grid-4 {
+grid-template-columns: repeat(2, 1fr);
+}
 }
