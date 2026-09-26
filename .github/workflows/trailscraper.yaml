@@ -50,12 +50,3 @@ jobs:
           else
             echo "has_geocoding_issues=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Maak GitHub Issue bij Geocoding Fouten
-        if: steps.check_geocoding.outputs.has_geocoding_issues == 'true'
-        uses: dacbd/create-issue-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "Geocoding waarschuwing: Coordinaten ontbreken" 
-          body-path: geocoding_issues.txt
-          assignees: aergrimm
