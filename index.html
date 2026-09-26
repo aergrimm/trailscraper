@@ -40,6 +40,7 @@
           <label for="travel-dist-filter">Max. reisafstand:</label>
           <select id="travel-dist-filter">
             <option value="all">Alle afstanden</option>
+			<option value="25">&lt; 25 km</option>
             <option value="50">&lt; 50 km</option>
             <option value="100">&lt; 100 km</option>
           </select>
@@ -47,18 +48,14 @@
       </div>
 
       <!-- Blok 3: Afstanden -->
-      <div class="filter-block">
-        <div class="filter-block-header">
-          <span class="filter-label">Afstanden:</span>
-          <button type="button" id="btn-toggle-dist" class="btn-toggle">Alles uit</button>
-        </div>
-        <div class="checkbox-group">
-          <label><input type="checkbox" class="dist-checkbox" value="under_15" checked> &lt; 15 km</label>
-          <label><input type="checkbox" class="dist-checkbox" value="up_to_25" checked> 15-25 km</label>
-          <label><input type="checkbox" class="dist-checkbox" value="up_to_42" checked> 26-42 km</label>
-          <label><input type="checkbox" class="dist-checkbox" value="over_42" checked> &gt; 42 km</label>
-        </div>
-      </div>
+		<div class="filter-group">
+		  <label>Afstand (km): <span id="distance-range-text">0 - 50+ km</span></label>
+		  <div class="range-slider">
+			<div class="slider-track"></div>
+			<input type="range" id="min-dist" min="0" max="50" value="0" step="1">
+			<input type="range" id="max-dist" min="0" max="50" value="50" step="1">
+		  </div>
+		</div>
 
       <!-- Blok 4: Provincies (4 kolommen) -->
       <div class="filter-block">

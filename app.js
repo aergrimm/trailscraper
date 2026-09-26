@@ -29,7 +29,40 @@ document.addEventListener('DOMContentLoaded', () => {
 	  "Zeeland": "ZE",
 	  "Limburg": "LI"
 	};
+	
+		// Dual range slider elementen ophalen
+		const minInput = document.getElementById('min-dist');
+		const maxInput = document.getElementById('max-dist');
+		const rangeText = document.getElementById('distance-range-text');
 
+		function updateDistanceFilter() {
+		  let minVal = parseInt(minInput.value, 10);
+		  let maxVal = parseInt(maxInput.value, 10);
+
+		  // Zorg dat min nooit groter wordt dan max
+		  if (minVal==0 && maxVal <5) {
+			maxVal=5;
+			maxInput.value = maxVal;
+		  }else if (minVal+5 > maxVal) {
+			minInput.value = maxVal-5;
+			minVal = maxVal-5;
+		  }
+
+		  // Update de tekst (bijv: "0 - 50+ km" of "15 - 30 km")
+		  const maxDisplay = maxVal === 50 ? '50+ km' : `${maxVal} km`;
+		  if (rangeText) {
+			rangeText.textContent = `${minVal} - ${maxDisplay}`;
+		  }
+
+		  // Trigger de filtering
+		  filterEvents(); // Of applyFilters(), afhankelijk van de naam in jouw app.js
+		}
+
+		// Koppel event listeners (zowel 'input' voor direct slepen als 'change')
+		if (minInput && maxInput) {
+		  minInput.addEventListener('input', updateDistanceFilter);
+		  maxInput.addEventListener('input', updateDistanceFilter);
+		}
 	function formatLocationWithProvince(locationStr) {
 	  if (!locationStr) return "";
 	  
@@ -104,7 +137,7 @@ if (scrollToTopBtn) {
   function formatDutchDate(isoDateStr) {
     if (!isoDateStr || isoDateStr === "Onbekend") return "Datum onbekend";
 
-    const parts = isoDateStr.split('-');
+	const parts = isoDateStr.split('-');
     if (parts.length !== 3) return isoDateStr;
 
     const year = parseInt(parts[0], 10);
@@ -280,62 +313,63 @@ events.forEach(e => {
   }
 
   // 8. FILTEREN EN SORTEREN
-  function filterEvents() {
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const selectedMonth = monthFilter ? monthFilter.value : 'all';
-    const maxTravelKm = travelDistFilter ? travelDistFilter.value : 'all';
+function filterEvents() {
+  const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const selectedMonth = monthFilter ? monthFilter.value : 'all';
+  const maxTravelKm = travelDistFilter ? travelDistFilter.value : 'all';
 
-    const checkedDistances = Array.from(distanceCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-    const checkedProvinces = Array.from(provinceCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
+  const minKm = parseInt(minInput ? minInput.value : 0, 10);
+  const maxKm = parseInt(maxInput ? maxInput.value : 50, 10);
 
-    const filtered = allEvents.filter(e => {
-      // 1. Zoekterm
-      const matchesSearch = !searchTerm || 
-        e.title.toLowerCase().includes(searchTerm) || 
-        e.location.toLowerCase().includes(searchTerm);
+  const checkedProvinces = Array.from(provinceCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase());
 
-      // 2. Maand
-      const matchesMonth = selectedMonth === 'all' || (e.date && e.date.startsWith(selectedMonth));
+  const filtered = allEvents.filter(e => {
+    // 0. Veiligheidscheck voor lege event objecten
+    if (!e) return false;
 
-      // 3. Provincie
-      const eventProv = (e.province || 'Buitenland').toLowerCase();
-      const matchesProvince = checkedProvinces.length > 0 && checkedProvinces.includes(eventProv);
+    // 1. Zoekterm
+    const matchesSearch = !searchTerm || 
+      (e.title && e.title.toLowerCase().includes(searchTerm)) || 
+      (e.location && e.location.toLowerCase().includes(searchTerm));
 
-      // 4. Afstand van de trail
-      let matchesDistance = false;
-      if (checkedDistances.length > 0) {
-        if (e.distances && e.distances.length > 0) {
-          const kms = e.distances.map(d => parseInt(d.replace('km', ''), 10)).filter(n => !isNaN(n));
-          if (kms.length > 0) {
-            const isUnder15 = checkedDistances.includes('under_15') && kms.some(k => k < 15);
-            const isUpTo25  = checkedDistances.includes('up_to_25') && kms.some(k => k >= 15 && k <= 25);
-            const isUpTo42  = checkedDistances.includes('up_to_42') && kms.some(k => k > 25 && k <= 42);
-            const isOver42  = checkedDistances.includes('over_42') && kms.some(k => k > 42);
+    // 2. Maand
+    const matchesMonth = selectedMonth === 'all' || (e.date && e.date.startsWith(selectedMonth));
 
-            matchesDistance = isUnder15 || isUpTo25 || isUpTo42 || isOver42;
-          } else {
-            matchesDistance = true;
-          }
-        } else {
-          matchesDistance = true;
+    // 3. Provincie
+    const eventProv = (e.province || 'Buitenland').toLowerCase();
+    const matchesProvince = checkedProvinces.length === 0 || checkedProvinces.includes(eventProv);
+
+    // 4. Afstand van de trail (met slider)
+    const eventDistances = e.distances || [];
+    let matchesDistance = true; // Standaard op true als er geen afstanden vermeld staan
+
+    if (eventDistances.length > 0) {
+      matchesDistance = eventDistances.some(dist => {
+        const km = parseFloat(dist);
+        if (isNaN(km)) return true; // Als afstand tekst/onbekend is, wel tonen
+
+        if (maxKm === 50) {
+          return km >= minKm; // 50 geldt als 50+ km
         }
-      }
+        return km >= minKm && km <= maxKm;
+      });
+    }
 
-      // 5. Max Reisafstand
-      let matchesTravelDistance = true;
-      if (maxTravelKm !== 'all') {
-        const maxKmNum = parseInt(maxTravelKm, 10);
-        matchesTravelDistance = e.calculatedDistance !== undefined && e.calculatedDistance <= maxKmNum;
-      }
+    // 5. Max Reisafstand (Auto)
+    let matchesTravelDistance = true;
+    if (maxTravelKm !== 'all') {
+      const maxKmNum = parseInt(maxTravelKm, 10);
+      matchesTravelDistance = e.calculatedDistance !== undefined && e.calculatedDistance <= maxKmNum;
+    }
 
-      return matchesSearch && matchesMonth && matchesProvince && matchesDistance && matchesTravelDistance;
-    });
+    return matchesSearch && matchesMonth && matchesProvince && matchesDistance && matchesTravelDistance;
+  });
 
-    // Zorg ervoor dat het resultaat altijd op datum gesorteerd is
-    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+  // Zorg ervoor dat het resultaat altijd op datum gesorteerd is
+  filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    renderEvents(filtered);
-  }
+  renderEvents(filtered);
+}
 
   // WISSELKNOPPEN
   function updateToggleBtnText(checkboxes, btn) {
