@@ -1590,7 +1590,9 @@
       "14km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-herfstrun",
-    "source": "gotrail"
+    "source": "gotrail",
+    "lat": 51.9063342,
+    "lon": 6.1964013
   },
   {
     "title": "Urban Trail Haarlem",
@@ -3825,7 +3827,9 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-winterbosloop/2027-01-31",
-    "source": "gotrail"
+    "source": "gotrail",
+    "lat": 51.9063342,
+    "lon": 6.1964013
   },
   {
     "title": "Rondje Oeken",
@@ -3999,7 +4003,9 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-winterbosloop/2027-02-07",
-    "source": "gotrail"
+    "source": "gotrail",
+    "lat": 51.9063342,
+    "lon": 6.1964013
   },
   {
     "title": "Braambergencross",
@@ -4530,7 +4536,9 @@
       "20km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-trailrun-montferland",
-    "source": "gotrail"
+    "source": "gotrail",
+    "lat": 51.9063342,
+    "lon": 6.1964013
   },
   {
     "title": "Amerongse Berg Trail",
