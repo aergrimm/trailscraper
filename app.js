@@ -225,7 +225,7 @@ events.forEach(e => {
 
   // 3. Titel opbouwen (klikbaar mits er een geldige link is)
   const titleHtml = (e.link && e.link !== "Onbekend")
-    ? `<a href="${e.link}" target="_blank" rel="noopener">${e.title}</a>`
+    ? `<a href="${e.link}" target="_blank" rel="noopener">${e.title} <span class="link-icon">🔗</span></a>`
     : e.title;
 
   // 4. Locatie opschonen met provincie-afkorting (bijv. "Driebergen-Rijsenburg (UT)")
