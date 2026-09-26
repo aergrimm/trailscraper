@@ -15,6 +15,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const provinceCheckboxes = document.querySelectorAll('.prov-checkbox');
   const btnToggleProv = document.getElementById('btn-toggle-prov');
 
+	const PROVINCIE_AFKORTINGEN = {
+	  "Noord-Brabant": "NB",
+	  "Noord-Holland": "NH",
+	  "Zuid-Holland": "ZH",
+	  "Gelderland": "GE",
+	  "Overijssel": "OV",
+	  "Groningen": "GR",
+	  "Friesland": "FR",
+	  "Flevoland": "FL",
+	  "Drenthe": "DR",
+	  "Utrecht": "UT",
+	  "Zeeland": "ZE",
+	  "Limburg": "LI"
+	};
+
+	function formatLocationWithProvince(locationStr) {
+	  if (!locationStr) return "";
+	  
+	  let formatted = locationStr.trim();
+	  
+	  Object.entries(PROVINCIE_AFKORTINGEN).forEach(([fullName, shortCode]) => {
+		// Vervang ", Gelderland" of " Gelderland" overal in de tekst door " (GE)"
+		const regex = new RegExp(`(,\\s*|\\s+)` + fullName, 'gi');
+		if (regex.test(formatted)) {
+		  formatted = formatted.replace(regex, ` (${shortCode})`);
+		}
+	  });
+
+	  return formatted;
+	}
 // ==========================================
 // SCROLL TO TOP KNOP LOGICA
 // ==========================================
@@ -170,55 +200,80 @@ if (scrollToTopBtn) {
     let htmlBuilder = '';
     let currentMonthHeader = '';
 
-    events.forEach(e => {
-      // Bepaal maand en jaar voor de scheidingsbalk
-      if (e.date && e.date !== "Onbekend") {
-        const parts = e.date.split('-');
-        if (parts.length === 3) {
-          const year = parts[0];
-          const monthIdx = parseInt(parts[1], 10) - 1;
-          const monthYearStr = `${dutchMonths[monthIdx]} ${year}`;
+events.forEach(e => {
+  // 1. Bepaal maand en jaar voor de scheidingsbalk
+  if (e.date && e.date !== "Onbekend") {
+    const parts = e.date.split('-');
+    if (parts.length === 3) {
+      const year = parts[0];
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const monthYearStr = `${dutchMonths[monthIdx]} ${year}`;
 
-          if (monthYearStr !== currentMonthHeader) {
-            currentMonthHeader = monthYearStr;
-            htmlBuilder += `
-              <div class="month-divider">
-                <h2>${currentMonthHeader}</h2>
-              </div>
-            `;
-          }
-        }
+      if (monthYearStr !== currentMonthHeader) {
+        currentMonthHeader = monthYearStr;
+        htmlBuilder += `
+          <div class="month-divider">
+            <h2>${currentMonthHeader}</h2>
+          </div>
+        `;
       }
+    }
+  }
 
-      const humanReadableDate = formatDutchDate(e.date);
-      const distText = e.distances && e.distances.length > 0 
-        ? e.distances.join(', ') 
-        : 'Afstand onbekend';
+  // 2. Geformateerde datum ophalen
+  const humanReadableDate = formatDutchDate(e.date);
 
-      const travelDistBadge = e.calculatedDistance !== undefined
-        ? ` <span class="travel-distance">(±${e.calculatedDistance} km vanaf ${userCity})</span>`
-        : '';
+  // 3. Titel opbouwen (klikbaar mits er een geldige link is)
+  const titleHtml = (e.link && e.link !== "Onbekend")
+    ? `<a href="${e.link}" target="_blank" rel="noopener">${e.title}</a>`
+    : e.title;
 
-      const linkHtml = (e.link && e.link !== "Onbekend")
-        ? `<a class="trail-event-link" href="${e.link}" target="_blank" rel="noopener">Bekijk &rarr;</a>`
-        : '';
+  // 4. Locatie opschonen met provincie-afkorting (bijv. "Driebergen-Rijsenburg (UT)")
+  const compactLocation = formatLocationWithProvince(e.location);
 
-      htmlBuilder += `
-        <div class="trail-event-card">
-          <div class="card-header">
-            <span class="card-date">📅 ${humanReadableDate}</span>
-            <h3 class="card-title">${e.title}</h3>
-            ${linkHtml}
-          </div>
-          <div class="card-location">
-            📍 ${e.location}${travelDistBadge}
-          </div>
-          <div class="card-distances">
-            🏃 ${distText}
-          </div>
-        </div>
-      `;
+  // 5. Reisafstand compacter formuleren (bijv. " • 12 km")
+  const travelDistBadge = (e.calculatedDistance !== undefined)
+    ? `<span class="distance-badge"> • 🚗 ${e.calculatedDistance}km</span>`
+    : '';
+
+// 6. Hardloopafstanden sorteren en omzetten naar badges
+  let distancesHtml = '';
+  if (e.distances && e.distances.length > 0) {
+    // Sorteer op het getal in de string (bijv. "4km" -> 4, "42km" -> 42)
+    const sortedDistances = [...e.distances].sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, ''), 10) || 0;
+      const numB = parseInt(b.replace(/\D/g, ''), 10) || 0;
+      return numA - numB;
     });
+
+    distancesHtml = sortedDistances
+      .map(d => `<span class="badge">${d}</span>`)
+      .join('');
+  } else {
+    distancesHtml = 'Afstand onbekend';
+  }
+
+  // 7. Compacte kaart HTML-structuur toevoegen
+  htmlBuilder += `
+    <div class="event-card">
+      <div class="card-header">
+        <span class="event-date">📅 ${humanReadableDate}</span>
+      </div>
+
+      <h3 class="event-title">
+        ${titleHtml}
+      </h3>
+
+      <p class="event-location">
+        📍 ${compactLocation}${travelDistBadge}
+      </p>
+
+      <div class="event-distances">
+        ${distancesHtml}
+      </div>
+    </div>
+  `;
+});
 
     eventsContainer.innerHTML = htmlBuilder;
     sendHeightToParent();

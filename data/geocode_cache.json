@@ -660,8 +660,8 @@
     6.3513327
   ],
   "Voorst Gem Voorst, Gelderland": [
-	52.1817110, 
-	6.1365587
+    52.181711,
+    6.1365587
   ],
   "Texel, Noord-Holland": [
     53.0767854,
@@ -918,5 +918,37 @@
   "Biddinghuizen, Flevoland": [
     52.4552216,
     5.6921598
+  ],
+  "s-Heerenberg, Gelderland": [
+    51.8779448,
+    6.2548363
+  ],
+  "Oirschot, Noord-Brabant": [
+    51.4889616,
+    5.300595
+  ],
+  "Arnhem, Gelderland": [
+    51.984257,
+    5.9108573
+  ],
+  "Volendam, Noord-Holland": [
+    52.4963759,
+    5.0682736
+  ],
+  "Spaarndam Gem. Haarlem, Noord-Holland": [
+    52.4135525,
+    4.6756292
+  ],
+  "Exloo, Drenthe": [
+    52.882455,
+    6.8643091
+  ],
+  "Grootebroek, Noord-Holland": [
+    52.6974447,
+    5.2260217
+  ],
+  "Valkenswaard, Noord-Brabant": [
+    51.3202409,
+    5.4581819
   ]
 }
