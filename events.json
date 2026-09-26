@@ -349,70 +349,6 @@
     "lon": 5.4332757
   },
   {
-    "title": "Jasperloop",
-    "date": "2026-09-27",
-    "location": "Someren, Noord-Brabant",
-    "province": "Noord-Brabant",
-    "distances": [
-      "3km",
-      "5km",
-      "13km",
-      "15km"
-    ],
-    "link": "https://gotrail.run/nl/event/jasperloop/2026-09-27",
-    "lat": 51.3863224,
-    "lon": 5.6888845
-  },
-  {
-    "title": "Wandel4daagse Schoorlse Duinen",
-    "date": "2026-09-29",
-    "location": "Schoorl, Noord-Holland",
-    "province": "Noord-Holland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/wandel4daagse-schoorlse-duinen",
-    "lat": 52.7009081,
-    "lon": 4.693947
-  },
-  {
-    "title": "Petzl Night Trail",
-    "date": "2026-10-02",
-    "location": "Utrechtse Heuvelrug, Utrecht",
-    "province": "Utrecht",
-    "distances": [
-      "6km",
-      "12km",
-      "18km"
-    ],
-    "link": "https://gotrail.run/nl/event/petzl-night-trail/2026-10-02",
-    "lat": 52.0286536,
-    "lon": 5.3948843
-  },
-  {
-    "title": "Kustmarathon Zeeland",
-    "date": "2026-10-02",
-    "location": "Zoutelande, Zeeland",
-    "province": "Zeeland",
-    "distances": [
-      "42km"
-    ],
-    "link": "https://gotrail.run/nl/event/kustmarathon-zeeland",
-    "lat": 51.5018348,
-    "lon": 3.4872245
-  },
-  {
-    "title": "Leersumse Veld Trail",
-    "date": "2026-10-03",
-    "location": "Leersum, Utrecht",
-    "province": "Utrecht",
-    "distances": [
-      "21km",
-      "11km"
-    ],
-    "link": "https://gotrail.run/nl/event/leersumse-veld-trail/2026-10-03",
-    "lat": 52.0102642,
-    "lon": 5.4332757
-  },
-  {
     "title": "Limburg Wine Trailrun",
     "date": "2026-10-03",
     "location": "Wijlre, Limburg",
@@ -3701,87 +3637,6 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/hulsbeekcross",
-    "lat": 52.3116616,
-    "lon": 6.9241615
-  },
-  {
-    "title": "Beachrun Scheveningen",
-    "date": "2027-01-24",
-    "location": "Den Haag, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [
-      "7km",
-      "14km"
-    ],
-    "link": "https://gotrail.run/nl/event/beachrun-scheveningen",
-    "lat": 52.0799838,
-    "lon": 4.3113461
-  },
-  {
-    "title": "Crossloop Luttenberg",
-    "date": "2027-01-24",
-    "location": "Luttenberg, Overijssel",
-    "province": "Overijssel",
-    "distances": [
-      "3km",
-      "5km",
-      "10km"
-    ],
-    "link": "https://gotrail.run/nl/event/crossloop-luttenberg",
-    "lat": 52.4063996,
-    "lon": 6.3654828
-  },
-  {
-    "title": "Breakline",
-    "date": "2027-01-29",
-    "location": "Zeewolde, Flevoland",
-    "province": "Flevoland",
-    "distances": [
-      "5km",
-      "50km"
-    ],
-    "link": "https://gotrail.run/nl/event/breakline",
-    "lat": 52.3451194,
-    "lon": 5.4580775
-  },
-  {
-    "title": "Leersumse Veld Ultra",
-    "date": "2027-01-30",
-    "location": "Leersum, Utrecht",
-    "province": "Utrecht",
-    "distances": [
-      "50km"
-    ],
-    "link": "https://gotrail.run/nl/event/leersumse-veld-ultra-trail",
-    "lat": 52.0102642,
-    "lon": 5.4332757
-  },
-  {
-    "title": "Drielandenpunt Trail | Trail des Trois Bornes",
-    "date": "2027-01-31",
-    "location": "Vaals, Limburg",
-    "province": "Limburg",
-    "distances": [
-      "20km",
-      "50km",
-      "11km",
-      "17km",
-      "60km"
-    ],
-    "link": "https://gotrail.run/nl/event/drielandenpunt-trail-trail-des-trois-bornes",
-    "lat": 50.7781016,
-    "lon": 5.9810696
-  },
-  {
-    "title": "Beachrun Scheveningen",
-    "date": "2027-01-24",
-    "location": "Den Haag, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [
-      "7km",
-      "14km"
-    ],
-    "link": "https://gotrail.run/nl/event/hulsbeekcross",
     "source": "gotrail",
     "lat": 52.3116616,
     "lon": 6.9241615
@@ -5836,45 +5691,6 @@
     ],
     "link": "https://gotrail.run/nl/event/grenslaup-vosseven/2028-06-18",
     "source": "gotrail",
-    "lat": 51.1932084,
-    "lon": 5.7235287
-  },
-  {
-    "title": "Grenslaup Vosseven",
-    "date": "2028-04-16",
-    "location": "Stramproy, Limburg",
-    "province": "Limburg",
-    "distances": [
-      "3km",
-      "5km"
-    ],
-    "link": "https://gotrail.run/nl/event/grenslaup-vosseven/2028-04-16",
-    "lat": 51.1932084,
-    "lon": 5.7235287
-  },
-  {
-    "title": "Grenslaup Vosseven",
-    "date": "2028-05-21",
-    "location": "Stramproy, Limburg",
-    "province": "Limburg",
-    "distances": [
-      "3km",
-      "5km"
-    ],
-    "link": "https://gotrail.run/nl/event/grenslaup-vosseven/2028-05-21",
-    "lat": 51.1932084,
-    "lon": 5.7235287
-  },
-  {
-    "title": "Grenslaup Vosseven",
-    "date": "2028-06-18",
-    "location": "Stramproy, Limburg",
-    "province": "Limburg",
-    "distances": [
-      "3km",
-      "5km"
-    ],
-    "link": "https://gotrail.run/nl/event/grenslaup-vosseven/2028-06-18",
     "lat": 51.1932084,
     "lon": 5.7235287
   }
