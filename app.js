@@ -15,6 +15,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const provinceCheckboxes = document.querySelectorAll('.prov-checkbox');
   const btnToggleProv = document.getElementById('btn-toggle-prov');
 
+// ==========================================
+// SCROLL TO TOP KNOP LOGICA
+// ==========================================
+const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+if (scrollToTopBtn) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      scrollToTopBtn.classList.add("visible");
+    } else {
+      scrollToTopBtn.classList.remove("visible");
+    }
+  });
+
+  scrollToTopBtn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+}
+
   // 1. Maandfilter vullen (huidige maand + 11 toekomstige maanden)
   function populateMonthFilter() {
     if (!monthFilter) return;
@@ -324,3 +346,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('resize', sendHeightToParent);
 });
+
