@@ -31,12 +31,12 @@ jobs:
       - name: Scraper uitvoeren
         run: python main.py
 
-    - name: Automatisch resultaten opslaan in Git
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        # Met -f dwing je Git om het geïgnoreerde events.json bestand toch toe te voegen
-        git add -f events.json
-        git add data/geocode_cache.json
-        git diff-index --quiet HEAD || git commit -m "chore: automatische update van events.json en geocode_cache"
-        git push
+      - name: Automatisch resultaten opslaan in Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # Met -f dwing je Git om het geïgnoreerde events.json bestand toch toe te voegen
+          git add -f events.json
+          git add data/geocode_cache.json
+          git diff-index --quiet HEAD || git commit -m "chore: automatische update van events.json en geocode_cache"
+          git push
