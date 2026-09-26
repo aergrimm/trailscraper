@@ -51,9 +51,13 @@ def enrich_events(events):
         # 1. Bekende locatie uit de cache paken
         if loc in cache:
             lat, lon = cache[loc]
-            event["lat"] = lat
-            event["lon"] = lon
-            logging.info(f"⚡ Locatie uit cache geladen: '{loc}' -> ({lat}, {lon})")
+            if lat is not None and lon is not None:
+                event["lat"] = lat
+                event["lon"] = lon
+                #logging.info(f"⚡ Locatie uit cache geladen: '{loc}' -> ({lat}, {lon})")
+            else:
+                # <-- HIER: Waarschuwing als de cache [null, null] bevat
+                logging.warning(f"⚠️ Geen coördinaten in cache voor locatie: '{loc}' (staat als null/null)")
         else:
             # 2. Nieuwe locatie ophalen via OpenStreetMap Nominatim API
             logging.info(f"🌐 Nieuwe plaats geocoderen: '{loc}'...")
