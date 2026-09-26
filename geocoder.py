@@ -90,4 +90,16 @@ def enrich_events(events):
     if cache_updated:
         save_cache(cache)
 
+    unresolved = []
+
+    for event in events:
+        if not event.get('lat') or not event.get('lon'):
+            unresolved.append(f"- **{event.get('title')}** ({event.get('location', 'Geen locatie')})")
+
+    if unresolved:
+        # Maak speciaal dit bestand aan
+        with open('geocoding_issues.txt', 'w', encoding='utf-8') as f:
+            f.write("De volgende evenementen konden niet worden geocodeerd:\n\n")
+            f.write("\n".join(unresolved))
+        logging.warning(f"⚠️ geocoding_issues.txt aangemaakt.")
     return events

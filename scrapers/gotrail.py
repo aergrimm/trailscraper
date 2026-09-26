@@ -164,11 +164,11 @@ def scrape():
     current_url = url
     all_site_events = []
     pages_processed = 0
-    max_pages = 20
+    max_pages = 50
 
     while current_url and pages_processed < max_pages:
         pages_processed += 1
-        logging.info(f"--- [ PAGINA {pages_processed} ] Ophalen: {current_url} ---")
+        #logging.info(f"--- [ PAGINA {pages_processed} ] Ophalen: {current_url} ---")
         
         html = fetch_html(current_url, headers=custom_headers)
         if not html:
@@ -178,12 +178,12 @@ def scrape():
         events = parse_events_from_page(soup, selectors, current_url)
         all_site_events.extend(events)
         
-        logging.info(f"✅ {len(events)} events gevonden op pagina {pages_processed}.")
+        #logging.info(f"✅ {len(events)} events gevonden op pagina {pages_processed}.")
 
         next_url = find_next_page_url(soup, current_url, selectors)
         if next_url and next_url != current_url:
             current_url = next_url
         else:
             current_url = None
-
+    logging.info(f"--- aantal pagina's: {pages_processed}, aantal events: {len(all_site_events)}")
     return all_site_events
