@@ -364,8 +364,8 @@
     4.3113461
   ],
   "Beek Gem Montferland, Gelderland": [
-    51.9063342,
-    6.1964013
+    null,
+    null
   ],
   "Haarlem, Noord-Holland": [
     52.3885317,
@@ -950,5 +950,17 @@
   "Valkenswaard, Noord-Brabant": [
     51.3202409,
     5.4581819
+  ],
+  "Meerse Plas, Noord-Brabant": [
+    51.6794219,
+    5.3558229
+  ],
+  "Weert, Limburg": [
+    51.2355829,
+    5.7050797
+  ],
+  "Borne, Overijssel": [
+    52.3018287,
+    6.7502395
   ]
 }

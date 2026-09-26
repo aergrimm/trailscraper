@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 *.ps1
 events.json
+geocoding_issues.txt

@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  issues: write  # <-- NOODZAKELIJK: geeft GitHub Actions rechten om issues aan te maken!
 
 jobs:
   scrape-and-publish:
@@ -40,3 +41,21 @@ jobs:
           git add data/geocode_cache.json
           git diff-index --quiet HEAD || git commit -m "chore: automatische update van events.json en geocode_cache"
           git push
+
+      - name: Controleer op geocoding issues
+        id: check_geocoding
+        run: |
+          if [ -f geocoding_issues.txt ]; then
+            echo "has_geocoding_issues=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_geocoding_issues=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Maak GitHub Issue bij Geocoding Fouten
+        if: steps.check_geocoding.outputs.has_geocoding_issues == 'true'
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Geocoding waarschuwing: Coordinaten ontbreken" 
+          body-path: geocoding_issues.txt
+          assignees: aergrimm

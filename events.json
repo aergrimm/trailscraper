@@ -492,6 +492,79 @@
     "lon": 5.8276871
   },
   {
+    "title": "Running Junkies Trailrun",
+    "date": "2026-10-04",
+    "location": "Meerse Plas, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "8km",
+      "16km"
+    ],
+    "link": "https://gotrail.run/nl/event/running-junkies-trailrun",
+    "source": "gotrail",
+    "lat": 51.6794219,
+    "lon": 5.3558229
+  },
+  {
+    "title": "Ijzeren Man Volksloop",
+    "date": "2026-10-04",
+    "location": "Weert, Limburg",
+    "province": "Limburg",
+    "distances": [
+      "3km",
+      "4km",
+      "12km",
+      "16km"
+    ],
+    "link": "https://gotrail.run/nl/event/hema-ijzeren-man-volksloop/2026-10-04",
+    "source": "gotrail",
+    "lat": 51.2355829,
+    "lon": 5.7050797
+  },
+  {
+    "title": "NightRun Borne",
+    "date": "2026-10-09",
+    "location": "Borne, Overijssel",
+    "province": "Overijssel",
+    "distances": [
+      "7km"
+    ],
+    "link": "https://gotrail.run/nl/event/nightrun-borne",
+    "source": "gotrail",
+    "lat": 52.3018287,
+    "lon": 6.7502395
+  },
+  {
+    "title": "RunForestRun Indian Summer",
+    "date": "2026-10-10",
+    "location": "Gasselte, Drenthe",
+    "province": "Drenthe",
+    "distances": [
+      "50km",
+      "75km",
+      "100km"
+    ],
+    "link": "https://gotrail.run/nl/event/indian-summer-ultra",
+    "source": "gotrail",
+    "lat": 52.971916,
+    "lon": 6.7921853
+  },
+  {
+    "title": "Oosterhoutse Trail",
+    "date": "2026-10-10",
+    "location": "Oosterhout, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "10km",
+      "18km",
+      "26km"
+    ],
+    "link": "https://gotrail.run/nl/event/oosterhoutse-trail",
+    "source": "gotrail",
+    "lat": 51.6322376,
+    "lon": 4.8630424
+  },
+  {
     "title": "PrattenburgRun",
     "date": "2026-10-10",
     "location": "Veenendaal, Utrecht",
@@ -1520,9 +1593,7 @@
       "14km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-herfstrun",
-    "source": "gotrail",
-    "lat": 51.9063342,
-    "lon": 6.1964013
+    "source": "gotrail"
   },
   {
     "title": "Urban Trail Haarlem",
@@ -3680,9 +3751,7 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-winterbosloop/2027-01-31",
-    "source": "gotrail",
-    "lat": 51.9063342,
-    "lon": 6.1964013
+    "source": "gotrail"
   },
   {
     "title": "Rondje Oeken",
@@ -3856,9 +3925,7 @@
       "10km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-winterbosloop/2027-02-07",
-    "source": "gotrail",
-    "lat": 51.9063342,
-    "lon": 6.1964013
+    "source": "gotrail"
   },
   {
     "title": "Braambergencross",
@@ -4389,9 +4456,7 @@
       "20km"
     ],
     "link": "https://gotrail.run/nl/event/beekse-trailrun-montferland",
-    "source": "gotrail",
-    "lat": 51.9063342,
-    "lon": 6.1964013
+    "source": "gotrail"
   },
   {
     "title": "Amerongse Berg Trail",
