@@ -56,6 +56,6 @@ jobs:
         uses: dacbd/create-issue-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: 📍 Geocoding waarschuwing: Coördinaten ontbreken
+          title: Geocoding waarschuwing: Coördinaten ontbreken
           body-path: geocoding_issues.txt
           assignees: aergrimm
