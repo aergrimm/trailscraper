@@ -359,3 +359,13 @@ grid-template-columns: repeat(2, 1fr);
 .event-date {
   font-size: 0.875rem;
 }
+
+.link-icon {
+  font-size: 0.75em;     /* Maakt de emoji 25% kleiner dan de titeltekst */
+  opacity: 0.7;          /* Iets lichter maken zodat hij niet te veel afleidt */
+  vertical-align: middle;/* Zorgt dat de emoji netjes op de schrijflijn staat */
+  margin-left: 2px;      /* Klein beetje afstand tot het laatste woord */
+  display: inline-block;
+  transform: translateY(-2px); /* Subtiele fijnafstemming naar beneden als dat nodig is */
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
