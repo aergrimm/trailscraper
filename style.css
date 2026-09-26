@@ -260,3 +260,33 @@ color: #64748b;
 grid-template-columns: repeat(2, 1fr);
 }
 }
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #007bff; /* Of jouw gewenste accentkleur */
+  color: white;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: none; /* Standaard verborgen */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.scroll-to-top:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.scroll-to-top.visible {
+  display: flex;
+}

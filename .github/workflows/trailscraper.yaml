@@ -29,11 +29,11 @@ jobs:
           pip install beautifulsoup4 requests feedgen icalendar python-dateutil
 
       - name: Scraper uitvoeren
-        run: python trailscraper.py
+        run: python main.py
 
       - name: Automatisch resultaten opslaan in Git
         run: |
           git config --global user.name "GitHub Action Bot"
           git config --global user.email "action@github.com"
-          git add events.json trail_events.xml trail_events.ics
+          git add events.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update trail events via cron" && git push)
