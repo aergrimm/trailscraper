@@ -17,12 +17,27 @@ from scrapers import gotrail
 from geocoder import enrich_events
 
 OUTPUT_FILE = "events.json"
-
+def deduplicate_events(events):
+    seen = set()
+    unique_events = []
+    
+    for event in events:
+        # Maak een unieke sleutel op basis van de opgeschoonde titel en de datum (of link)
+        title = event.get('title', '').strip().lower()
+        date = event.get('date', '')
+        identifier = f"{title}_{date}"
+        
+        if identifier not in seen:
+            seen.add(identifier)
+            unique_events.append(event)
+            
+    return unique_events
+    
 def main():
     logging.info("🚀 TrailScraper Pijplijn gestart...")
     all_events = []
 
-    # 1. Voer de GoTrail scraper uit
+    #Voer de GoTrail scraper uit
     try:
         gotrail_events = gotrail.scrape()
         all_events.extend(gotrail_events)
@@ -32,10 +47,14 @@ def main():
     # (Hier kun je later eenvoudig extra scrapers toevoegen, bijv. betrail.scrape())
 
     logging.info(f"📊 Totaal {len(all_events)} ruwe events verzameld.")
-
-    # 2. Verrijken met lat/lon via geocoder (geocoder.py leest/schrijft ook de cache)
+    
+    # ONTDUBBELEN (Vóór de geocoder!)
+    unique_events = deduplicate_events(all_events)
+    logging.info(f"✨ Aantal unieke events na deduplicatie: {len(unique_events)}")
+    
+    # Verrijken met lat/lon via geocoder (geocoder.py leest/schrijft ook de cache)
     logging.info("📍 Starten met coördinaten verrijken (via cache/API)...")
-    enriched_events = enrich_events(all_events)
+    enriched_events = enrich_events(unique_events)
 
     # 3. Opslaan als definitief events.json bestand voor de frontend
     try:
