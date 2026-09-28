@@ -1,75 +1,5 @@
 [
   {
-    "title": "Urban Trail Rotterdam",
-    "date": "2026-09-27",
-    "location": "Rotterdam, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [
-      "7km",
-      "12km"
-    ],
-    "link": "https://gotrail.run/nl/event/urban-trail-rotterdam",
-    "source": "gotrail",
-    "lat": 51.9244424,
-    "lon": 4.47775
-  },
-  {
-    "title": "Tuxis Ede's Best Run",
-    "date": "2026-09-27",
-    "location": "Ede, Gelderland",
-    "province": "Gelderland",
-    "distances": [
-      "4km",
-      "9km"
-    ],
-    "link": "https://gotrail.run/nl/event/tuxis-edes-best-run",
-    "source": "gotrail",
-    "lat": 52.0716826,
-    "lon": 5.7455106
-  },
-  {
-    "title": "Broekstaclerun",
-    "date": "2026-09-27",
-    "location": "Broekland, Overijssel",
-    "province": "Overijssel",
-    "distances": [
-      "4km",
-      "5km",
-      "10km"
-    ],
-    "link": "https://gotrail.run/nl/event/broekstaclerun",
-    "source": "gotrail",
-    "lat": 52.3629152,
-    "lon": 6.1989253
-  },
-  {
-    "title": "Euromast Trappenloop",
-    "date": "2026-09-27",
-    "location": "Rotterdam, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/euromast-trappenloop",
-    "source": "gotrail",
-    "lat": 51.9244424,
-    "lon": 4.47775
-  },
-  {
-    "title": "Jasperloop",
-    "date": "2026-09-27",
-    "location": "Someren, Noord-Brabant",
-    "province": "Noord-Brabant",
-    "distances": [
-      "3km",
-      "5km",
-      "13km",
-      "15km"
-    ],
-    "link": "https://gotrail.run/nl/event/jasperloop/2026-09-27",
-    "source": "gotrail",
-    "lat": 51.3863224,
-    "lon": 5.6888845
-  },
-  {
     "title": "Wandel4daagse Schoorlse Duinen",
     "date": "2026-09-29",
     "location": "Schoorl, Noord-Holland",
@@ -959,6 +889,21 @@
     "lon": 5.5320836
   },
   {
+    "title": "Nea BosCross",
+    "date": "2026-10-25",
+    "location": "Purmerend, Noord-Holland",
+    "province": "Noord-Holland",
+    "distances": [
+      "3km",
+      "6km",
+      "8km"
+    ],
+    "link": "https://gotrail.run/nl/event/nea-boscross",
+    "source": "gotrail",
+    "lat": 52.5024789,
+    "lon": 4.9614827
+  },
+  {
     "title": "Twentse Night Trail RUNenschede",
     "date": "2026-10-30",
     "location": "Oldenzaal, Overijssel",
@@ -983,6 +928,22 @@
     "source": "gotrail",
     "lat": 52.1793308,
     "lon": 5.2224661
+  },
+  {
+    "title": "Berenloop Terschelling",
+    "date": "2026-10-31",
+    "location": "Terschelling, Friesland",
+    "province": "Friesland",
+    "distances": [
+      "21km",
+      "5km",
+      "10km",
+      "42km"
+    ],
+    "link": "https://gotrail.run/nl/event/berenloop-terschelling",
+    "source": "gotrail",
+    "lat": 53.3339055,
+    "lon": 5.3514909
   },
   {
     "title": "Cauberg Trail",
@@ -1087,20 +1048,6 @@
     "source": "gotrail",
     "lat": 51.3315936,
     "lon": 4.0877328
-  },
-  {
-    "title": "Berenloop Terschelling",
-    "date": "2026-11-01",
-    "location": "Terschelling, Friesland",
-    "province": "Friesland",
-    "distances": [
-      "21km",
-      "42km"
-    ],
-    "link": "https://gotrail.run/nl/event/berenloop-terschelling",
-    "source": "gotrail",
-    "lat": 53.3339055,
-    "lon": 5.3514909
   },
   {
     "title": "Alphense Bergen Trail",
@@ -1257,6 +1204,22 @@
     "lon": 4.6756292
   },
   {
+    "title": "Drunense Duinen Cross",
+    "date": "2026-11-01",
+    "location": "Drunen, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "3km",
+      "5km",
+      "7km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/drunense-duinen-cross",
+    "source": "gotrail",
+    "lat": 51.6862832,
+    "lon": 5.130986
+  },
+  {
     "title": "Night Trail Zwolle",
     "date": "2026-11-05",
     "location": "Zwolle, Overijssel",
@@ -1386,73 +1349,6 @@
     "source": "gotrail",
     "lat": 52.4535194,
     "lon": 6.4137203
-  },
-  {
-    "title": "AV Passaat Cross",
-    "date": "2026-11-07",
-    "location": "Papendrecht, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/av-passaat-cross",
-    "source": "gotrail",
-    "lat": 51.834667,
-    "lon": 4.7046883
-  },
-  {
-    "title": "Dom Verdan Trail",
-    "date": "2026-11-07",
-    "location": "Reutum, Overijssel",
-    "province": "Overijssel",
-    "distances": [
-      "10km",
-      "19km"
-    ],
-    "link": "https://gotrail.run/nl/event/dom-verdan-jubileum-trail",
-    "source": "gotrail",
-    "lat": 52.391015,
-    "lon": 6.845769
-  },
-  {
-    "title": "Haagse Duinentrail",
-    "date": "2026-11-07",
-    "location": "Den Haag, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [
-      "20km"
-    ],
-    "link": "https://gotrail.run/nl/event/haagse-duinentrail",
-    "source": "gotrail",
-    "lat": 52.0799838,
-    "lon": 4.3113461
-  },
-  {
-    "title": "Beekse Herfstrun",
-    "date": "2026-11-08",
-    "location": "Beek Gem Montferland, Gelderland",
-    "province": "Gelderland",
-    "distances": [
-      "21km",
-      "7km",
-      "14km"
-    ],
-    "link": "https://gotrail.run/nl/event/beekse-herfstrun",
-    "source": "gotrail",
-    "lat": 51.9063342,
-    "lon": 6.1964013
-  },
-  {
-    "title": "Urban Trail Haarlem",
-    "date": "2026-11-08",
-    "location": "Haarlem, Noord-Holland",
-    "province": "Noord-Holland",
-    "distances": [
-      "6km",
-      "11km"
-    ],
-    "link": "https://gotrail.run/nl/event/urban-trail-haarlem",
-    "source": "gotrail",
-    "lat": 52.3885317,
-    "lon": 4.6388048
   },
   {
     "title": "Last Runners Standing - Langenboom",
@@ -1959,73 +1855,6 @@
     "lon": 5.3298487
   },
   {
-    "title": "Nunspeetse Wolventrail",
-    "date": "2026-11-21",
-    "location": "Nunspeet, Gelderland",
-    "province": "Gelderland",
-    "distances": [
-      "8km",
-      "15km"
-    ],
-    "link": "https://gotrail.run/nl/event/de-nunspeetse-wolventrail",
-    "source": "gotrail",
-    "lat": 52.3372909,
-    "lon": 5.7956364
-  },
-  {
-    "title": "Halve Marathon van Monster",
-    "date": "2026-11-21",
-    "location": "Monster, Zuid-Holland",
-    "province": "Zuid-Holland",
-    "distances": [
-      "21km",
-      "5km",
-      "10km"
-    ],
-    "link": "https://gotrail.run/nl/event/halve-marathon-van-monster",
-    "source": "gotrail",
-    "lat": 52.0223028,
-    "lon": 4.1715344
-  },
-  {
-    "title": "Scheldesportcross",
-    "date": "2026-11-21",
-    "location": "Hoek, Zeeland",
-    "province": "Zeeland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/scheldesportcross",
-    "source": "gotrail",
-    "lat": 51.3093842,
-    "lon": 3.7789931
-  },
-  {
-    "title": "Graef Castricum Trail",
-    "date": "2026-11-22",
-    "location": "Castricum, Noord-Holland",
-    "province": "Noord-Holland",
-    "distances": [
-      "7km",
-      "11km",
-      "35km",
-      "60km"
-    ],
-    "link": "https://gotrail.run/nl/event/graef-castricum-trail",
-    "source": "gotrail",
-    "lat": 52.5496739,
-    "lon": 4.6696185
-  },
-  {
-    "title": "Twentse Cross Competitie",
-    "date": "2026-11-22",
-    "location": "Goor, Overijssel",
-    "province": "Overijssel",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/twentse-cross-competitie/2026-11-22",
-    "source": "gotrail",
-    "lat": 52.2321562,
-    "lon": 6.5809004
-  },
-  {
     "title": "Last Man Standing — Lingezegen Run",
     "date": "2026-11-22",
     "location": "Elst, Gelderland",
@@ -2292,6 +2121,20 @@
     "lon": 4.3768613
   },
   {
+    "title": "Oude Maas Cross",
+    "date": "2026-11-28",
+    "location": "Barendrecht, Zuid-Holland",
+    "province": "Zuid-Holland",
+    "distances": [
+      "5km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/oude-maas-cross",
+    "source": "gotrail",
+    "lat": 51.851938,
+    "lon": 4.5293835
+  },
+  {
     "title": "Urban Trail Eindhoven",
     "date": "2026-11-29",
     "location": "Eindhoven, Noord-Brabant",
@@ -2402,6 +2245,20 @@
     "source": "gotrail",
     "lat": 52.6654515,
     "lon": 5.5987894
+  },
+  {
+    "title": "Mildamcross",
+    "date": "2026-12-05",
+    "location": "Mildam, Friesland",
+    "province": "Friesland",
+    "distances": [
+      "5km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/mildamcross",
+    "source": "gotrail",
+    "lat": 52.9361396,
+    "lon": 6.0028823
   },
   {
     "title": "Brabantse Kluis Trail",
@@ -2693,6 +2550,7 @@
     "distances": [
       "9km",
       "18km",
+      "20km",
       "27km"
     ],
     "link": "https://gotrail.run/nl/event/galgenberg-trail/2026-12-13",
@@ -2925,6 +2783,22 @@
     "lon": 5.6515519
   },
   {
+    "title": "Lidocross",
+    "date": "2026-12-20",
+    "location": "Waalwijk, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "4km",
+      "6km",
+      "7km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/lidocross",
+    "source": "gotrail",
+    "lat": 51.6873372,
+    "lon": 5.0173079
+  },
+  {
     "title": "De Belte Kerstcrossloop",
     "date": "2026-12-26",
     "location": "Nieuw Heeten, Overijssel",
@@ -3057,57 +2931,6 @@
     "source": "gotrail",
     "lat": 52.1795738,
     "lon": 5.9300775
-  },
-  {
-    "title": "Oudejaarscross Stiens",
-    "date": "2026-12-31",
-    "location": "Stiens, Friesland",
-    "province": "Friesland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/oudejaarscross-stiens",
-    "source": "gotrail",
-    "lat": 53.2607534,
-    "lon": 5.7642074
-  },
-  {
-    "title": "Sisu Oudejaarscross Almelo",
-    "date": "2026-12-31",
-    "location": "Almelo, Overijssel",
-    "province": "Overijssel",
-    "distances": [
-      "5km",
-      "10km"
-    ],
-    "link": "https://gotrail.run/nl/event/sisu-oudejaarscross-almelo",
-    "source": "gotrail",
-    "lat": 52.3563585,
-    "lon": 6.6636219
-  },
-  {
-    "title": "Natuurloop Cadzand",
-    "date": "2026-12-31",
-    "location": "Cadzand, Zeeland",
-    "province": "Zeeland",
-    "distances": [
-      "3km",
-      "6km",
-      "10km"
-    ],
-    "link": "https://gotrail.run/nl/event/regiobank-natuurloop/2026-12-31",
-    "source": "gotrail",
-    "lat": 51.3685463,
-    "lon": 3.4089972
-  },
-  {
-    "title": "Phanos Boscross",
-    "date": "2027-01-02",
-    "location": "Amstelveen, Noord-Holland",
-    "province": "Noord-Holland",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/boscross-amsterdam",
-    "source": "gotrail",
-    "lat": 52.2862177,
-    "lon": 4.8526493
   },
   {
     "title": "Midwintercross Heeten",
@@ -3258,6 +3081,79 @@
     "lon": 5.478633
   },
   {
+    "title": "Witte Ruijsheuvelcross",
+    "date": "2027-01-10",
+    "location": "Macharen, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "5km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/witte-ruijsheuvelcross",
+    "source": "gotrail",
+    "lat": 51.804411,
+    "lon": 5.5447825
+  },
+  {
+    "title": "Enclavecross Baarle-Nassau",
+    "date": "2027-01-10",
+    "location": "Baarle-Nassau, Noord-Brabant",
+    "province": "Noord-Brabant",
+    "distances": [
+      "3km",
+      "4km",
+      "8km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/enclavecross-baarle-nassau",
+    "source": "gotrail",
+    "lat": 51.4374696,
+    "lon": 4.8730747
+  },
+  {
+    "title": "Hulst by Lightrun",
+    "date": "2027-01-15",
+    "location": "Hulst, Zeeland",
+    "province": "Zeeland",
+    "distances": [
+      "5km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/hulst-by-lightrun",
+    "source": "gotrail",
+    "lat": 51.3315936,
+    "lon": 4.0877328
+  },
+  {
+    "title": "Zuurbergcross Holten",
+    "date": "2027-01-16",
+    "location": "Holten, Overijssel",
+    "province": "Overijssel",
+    "distances": [
+      "3km",
+      "5km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/zuurbergcross-holten",
+    "source": "gotrail",
+    "lat": 52.2819676,
+    "lon": 6.4216444
+  },
+  {
+    "title": "3 Meren Cross Gieten",
+    "date": "2027-01-16",
+    "location": "Eext, Drenthe",
+    "province": "Drenthe",
+    "distances": [
+      "5km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/3-meren-cross-gieten",
+    "source": "gotrail",
+    "lat": 53.0193989,
+    "lon": 6.7354152
+  },
+  {
     "title": "Sint Anthonis Trail",
     "date": "2027-01-16",
     "location": "Sint Anthonis, Noord-Brabant",
@@ -3386,9 +3282,10 @@
     "location": "Zeist, Utrecht",
     "province": "Utrecht",
     "distances": [
-      "21km",
       "10km",
-      "30km"
+      "15km",
+      "30km",
+      "35km"
     ],
     "link": "https://gotrail.run/nl/event/austerlitz-trail/2027-01-23",
     "source": "gotrail",
@@ -3683,7 +3580,7 @@
     "location": "Nijkerk, Gelderland",
     "province": "Gelderland",
     "distances": [
-      "4km"
+      "25km"
     ],
     "link": "https://gotrail.run/nl/event/run-bike-run-nijkerk",
     "source": "gotrail",
@@ -3919,6 +3816,22 @@
     "lon": 6.1785077
   },
   {
+    "title": "Hivernaltrail",
+    "date": "2027-02-27",
+    "location": "Landgraaf, Limburg",
+    "province": "Limburg",
+    "distances": [
+      "6km",
+      "13km",
+      "30km",
+      "50km"
+    ],
+    "link": "https://gotrail.run/nl/event/hivernaltrail",
+    "source": "gotrail",
+    "lat": 50.9024566,
+    "lon": 6.0293103
+  },
+  {
     "title": "Trailrun Terschelling",
     "date": "2027-02-28",
     "location": "West-Terschelling, Friesland",
@@ -4019,6 +3932,20 @@
     "lon": 5.2224661
   },
   {
+    "title": "Knipecross",
+    "date": "2027-03-06",
+    "location": "De Knipe, Friesland",
+    "province": "Friesland",
+    "distances": [
+      "6km",
+      "11km"
+    ],
+    "link": "https://gotrail.run/nl/event/knipecross",
+    "source": "gotrail",
+    "lat": 52.9684073,
+    "lon": 5.9740211
+  },
+  {
     "title": "65 van Walcheren",
     "date": "2027-03-07",
     "location": "Westkapelle, Zeeland",
@@ -4073,6 +4000,36 @@
     "source": "gotrail",
     "lat": 52.0102642,
     "lon": 5.4332757
+  },
+  {
+    "title": "Vuurtoren Trail & Walk Ameland",
+    "date": "2027-03-13",
+    "location": "Hollum, Friesland",
+    "province": "Friesland",
+    "distances": [
+      "7km",
+      "12km",
+      "35km",
+      "60km"
+    ],
+    "link": "https://gotrail.run/nl/event/vuurtoren-trail-ameland",
+    "source": "gotrail",
+    "lat": 53.4412172,
+    "lon": 5.6377723
+  },
+  {
+    "title": "Ren Voor Hun Leven Cross",
+    "date": "2027-03-13",
+    "location": "Heerde, Gelderland",
+    "province": "Gelderland",
+    "distances": [
+      "5km",
+      "10km"
+    ],
+    "link": "https://gotrail.run/nl/event/ren-voor-hun-leven-cross",
+    "source": "gotrail",
+    "lat": 52.4056303,
+    "lon": 6.0413984
   },
   {
     "title": "Hessenheemcross – Markelo",
@@ -4461,8 +4418,9 @@
     "province": "Utrecht",
     "distances": [
       "10km",
-      "20km",
-      "30km"
+      "15km",
+      "30km",
+      "35km"
     ],
     "link": "https://gotrail.run/nl/event/austerlitz-trail/2027-05-08",
     "source": "gotrail",
@@ -4782,6 +4740,22 @@
     "lon": 6.5533434
   },
   {
+    "title": "Veluwezoom Trail",
+    "date": "2027-07-11",
+    "location": "Dieren, Gelderland",
+    "province": "Gelderland",
+    "distances": [
+      "7km",
+      "15km",
+      "31km",
+      "62km"
+    ],
+    "link": "https://gotrail.run/nl/event/veluwezoom-trail",
+    "source": "gotrail",
+    "lat": 52.0526703,
+    "lon": 6.1014431
+  },
+  {
     "title": "Kardingebultra",
     "date": "2027-07-17",
     "location": "Groningen, Groningen",
@@ -4913,73 +4887,6 @@
     "lon": 5.7884632
   },
   {
-    "title": "Turfveld Zomercross",
-    "date": "2027-08-15",
-    "location": "Den Burg, Noord-Holland",
-    "province": "Noord-Holland",
-    "distances": [
-      "4km",
-      "8km"
-    ],
-    "link": "https://gotrail.run/nl/event/turfveld-zomercross/2027-08-15",
-    "source": "gotrail",
-    "lat": 53.055232,
-    "lon": 4.7967379
-  },
-  {
-    "title": "Austerlitz Trail",
-    "date": "2027-08-21",
-    "location": "Zeist, Utrecht",
-    "province": "Utrecht",
-    "distances": [
-      "21km",
-      "10km",
-      "30km"
-    ],
-    "link": "https://gotrail.run/nl/event/austerlitz-trail/2027-08-21",
-    "source": "gotrail",
-    "lat": 52.0892832,
-    "lon": 5.2276307
-  },
-  {
-    "title": "Pink Ribbon Soester Wandelweekend",
-    "date": "2027-08-21",
-    "location": "Soest, Utrecht",
-    "province": "Utrecht",
-    "distances": [],
-    "link": "https://gotrail.run/nl/event/pink-ribbon-soester-wandelweekend",
-    "source": "gotrail",
-    "lat": 52.174595,
-    "lon": 5.2909674
-  },
-  {
-    "title": "Turfveld Zomercross",
-    "date": "2027-08-22",
-    "location": "Den Burg, Noord-Holland",
-    "province": "Noord-Holland",
-    "distances": [
-      "4km",
-      "8km"
-    ],
-    "link": "https://gotrail.run/nl/event/turfveld-zomercross/2027-08-22",
-    "source": "gotrail",
-    "lat": 53.055232,
-    "lon": 4.7967379
-  },
-  {
-    "title": "Austerlitz Ultra",
-    "date": "2027-08-28",
-    "location": "Zeist, Utrecht",
-    "province": "Utrecht",
-    "distances": [
-      "50km"
-    ],
-    "link": "https://gotrail.run/nl/event/austerlitz-ultra",
-    "source": "gotrail",
-    "lat": 52.0892832,
-    "lon": 5.2276307
-  },
-  {
     "title": "Pax Color Trailrun",
     "date": "2027-09-03",
     "location": "Beneden-Leeuwen, Gelderland",
@@ -5085,6 +4992,22 @@
     "lon": 5.6969882
   },
   {
+    "title": "Yu Man Race Obstacle Run",
+    "date": "2027-09-05",
+    "location": "Nijverdal, Overijssel",
+    "province": "Overijssel",
+    "distances": [
+      "21km",
+      "5km",
+      "10km",
+      "15km"
+    ],
+    "link": "https://gotrail.run/nl/event/yu-man-race-obstacle-run",
+    "source": "gotrail",
+    "lat": 52.3592015,
+    "lon": 6.4654075
+  },
+  {
     "title": "Wildman Run Sleen",
     "date": "2027-09-11",
     "location": "Sleen, Drenthe",
@@ -5099,6 +5022,22 @@
     "source": "gotrail",
     "lat": 52.772368,
     "lon": 6.8031287
+  },
+  {
+    "title": "Airborne Freedom Run",
+    "date": "2027-09-12",
+    "location": "Arnhem, Gelderland",
+    "province": "Gelderland",
+    "distances": [
+      "5km",
+      "10km",
+      "44km",
+      "60km"
+    ],
+    "link": "https://gotrail.run/nl/event/airborne-freedom-run",
+    "source": "gotrail",
+    "lat": 51.984257,
+    "lon": 5.9108573
   },
   {
     "title": "RunForestRun Springendal",
@@ -5123,7 +5062,8 @@
     "distances": [
       "21km",
       "7km",
-      "14km"
+      "14km",
+      "20km"
     ],
     "link": "https://gotrail.run/nl/event/kempenland-trail",
     "source": "gotrail",
@@ -5313,8 +5253,8 @@
     "location": "Aarle-Rixtel, Noord-Brabant",
     "province": "Noord-Brabant",
     "distances": [
-      "21km",
       "12km",
+      "20km",
       "32km"
     ],
     "link": "https://gotrail.run/nl/event/brabantse-kluis-trail",
@@ -5330,6 +5270,7 @@
     "distances": [
       "9km",
       "18km",
+      "20km",
       "27km"
     ],
     "link": "https://gotrail.run/nl/event/galgenberg-trail/2027-12-12",
