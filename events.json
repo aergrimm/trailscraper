@@ -838,6 +838,21 @@
     "lon": 5.4980051
   },
   {
+    "title": "AVW Crosscircuit",
+    "date": "2026-10-25",
+    "location": "Maassluis, Zuid-Holland",
+    "province": "Zuid-Holland",
+    "distances": [
+      "3km",
+      "6km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/avw-crosscircuit/2026-10-25",
+    "source": "gotrail",
+    "lat": 51.9266671,
+    "lon": 4.2440007
+  },
+  {
     "title": "Jan de Vos Najaarscross",
     "date": "2026-10-25",
     "location": "Rotterdam, Zuid-Holland",
@@ -1674,6 +1689,20 @@
     "source": "gotrail",
     "lat": 51.5018348,
     "lon": 3.4872245
+  },
+  {
+    "title": "Boomkroonpad Cross Drouwen",
+    "date": "2026-11-14",
+    "location": "Gasselte, Drenthe",
+    "province": "Drenthe",
+    "distances": [
+      "5km",
+      "9km"
+    ],
+    "link": "https://gotrail.run/nl/event/boomkroonpad-cross-drouwen",
+    "source": "gotrail",
+    "lat": 52.971916,
+    "lon": 6.7921853
   },
   {
     "title": "Grenslaup Vosseven",
@@ -2834,6 +2863,21 @@
     "lon": 5.6422866
   },
   {
+    "title": "Mabelis Jules Unlimited",
+    "date": "2026-12-13",
+    "location": "Breskens, Zeeland",
+    "province": "Zeeland",
+    "distances": [
+      "5km",
+      "10km",
+      "17km"
+    ],
+    "link": "https://gotrail.run/nl/event/mabelis-jules-unlimited",
+    "source": "gotrail",
+    "lat": 51.3957804,
+    "lon": 3.5551696
+  },
+  {
     "title": "Hollands Duin Ultra",
     "date": "2026-12-19",
     "location": "Noordwijk, Zuid-Holland",
@@ -3676,6 +3720,22 @@
     "source": "gotrail",
     "lat": 51.9063342,
     "lon": 6.1964013
+  },
+  {
+    "title": "Rondje Oeken",
+    "date": "2027-01-31",
+    "location": "Brummen, Gelderland",
+    "province": "Gelderland",
+    "distances": [
+      "21km",
+      "5km",
+      "10km",
+      "12km"
+    ],
+    "link": "https://gotrail.run/nl/event/rondje-oeken",
+    "source": "gotrail",
+    "lat": 52.1106503,
+    "lon": 6.1258774
   },
   {
     "title": "Singelcross Zaltbommel",
@@ -4733,8 +4793,8 @@
     "province": "Utrecht",
     "distances": [
       "50km",
-      "75km",
-      "100km"
+      "100km",
+      "75km"
     ],
     "link": "https://gotrail.run/nl/event/utrechtse-heuvelrug-ultra-trail/2027-05-29",
     "source": "gotrail",
@@ -4843,7 +4903,6 @@
     "location": "Soesterberg, Utrecht",
     "province": "Utrecht",
     "distances": [
-      "21km",
       "42km"
     ],
     "link": "https://gotrail.run/nl/event/klimaatmarathon",
