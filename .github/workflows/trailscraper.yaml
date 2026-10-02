@@ -1,7 +1,7 @@
 name: Automatic Trail Scraper
 
 on:
-  schedule:
+  #schedule:
     # Draait elke nacht om 02:00 UTC (cron-schedule)
     # - cron: '0 2 * * *'
   # Maakt het ook mogelijk om de scraper handmatig via de GitHub knop uit te voeren
