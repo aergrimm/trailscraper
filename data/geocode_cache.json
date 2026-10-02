@@ -962,5 +962,61 @@
   "Borne, Overijssel": [
     52.3018287,
     6.7502395
+  ],
+  "Buurse, Overijssel": [
+    52.1454123,
+    6.8304587
+  ],
+  "Hengelo, Overijssel": [
+    52.2523195,
+    6.7955256
+  ],
+  "Wierden, Overijssel": [
+    52.3579925,
+    6.5921844
+  ],
+  "Diemen, Noord-Holland": [
+    52.3350493,
+    4.9842843
+  ],
+  "Purmerend, Noord-Holland": [
+    52.5024789,
+    4.9614827
+  ],
+  "Drunen, Noord-Brabant": [
+    51.6862832,
+    5.130986
+  ],
+  "Barendrecht, Zuid-Holland": [
+    51.851938,
+    4.5293835
+  ],
+  "Mildam, Friesland": [
+    52.9361396,
+    6.0028823
+  ],
+  "De Knipe, Friesland": [
+    52.9684073,
+    5.9740211
+  ],
+  "Nieuw Milligen, Gelderland": [
+    52.2208329,
+    5.777902
+  ],
+  "Bedaf, Noord-Brabant": [
+    51.6610597,
+    5.5756339
+  ],
+  "Helmond, Noord-Brabant": [
+    51.4736023,
+    5.6670321
+  ],
+  "Sint Nicolaasga, Friesland": [
+    52.9227657,
+    5.7418907
+  ],
+  "Breskens, Zeeland": [
+    51.3957804,
+    3.5551696
   ]
 }
